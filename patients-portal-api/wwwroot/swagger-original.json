@@ -1,0 +1,296 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Patients Portal",
+    "description" : "Best Medical Portal API ever",
+    "contact" : {
+      "email" : "nikolas.tsk@gmail.com"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/yimejky/PatientsPortal/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  } ],
+  "tags" : [ {
+    "name" : "Medicines"
+  }, {
+    "name" : "Users",
+    "description" : "Patients and Doctors"
+  }, {
+    "name" : "Visits"
+  }, {
+    "name" : "E-Prescriptions"
+  } ],
+  "paths" : {
+    "/medicines" : {
+      "get" : {
+        "tags" : [ "Medicines" ],
+        "summary" : "Get all medicines",
+        "operationId" : "getMedicines",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Medicine"
+                  },
+                  "x-content-type" : "application/json"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users" : {
+      "get" : {
+        "tags" : [ "Users" ],
+        "summary" : "Get all users",
+        "operationId" : "getUsers",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/User"
+                  },
+                  "x-content-type" : "application/json"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/visits" : {
+      "get" : {
+        "tags" : [ "Visits" ],
+        "summary" : "Get all visits",
+        "operationId" : "getVisits",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Visit"
+                  },
+                  "x-content-type" : "application/json"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Visits" ],
+        "summary" : "Update an existing Visit",
+        "operationId" : "updateVisit",
+        "requestBody" : {
+          "description" : "Visit object",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Visit"
+              }
+            },
+            "application/xml" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Visit"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "400" : {
+            "description" : "Invalid ID supplied"
+          },
+          "404" : {
+            "description" : "Visit not found"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Visits" ],
+        "summary" : "Add a new Visit",
+        "operationId" : "addVisit",
+        "requestBody" : {
+          "description" : "Visit object",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Visit"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "405" : {
+            "description" : "Invalid input"
+          }
+        }
+      }
+    },
+    "/visits/{visitId}" : {
+      "delete" : {
+        "tags" : [ "Visits" ],
+        "summary" : "Deletes a Visit",
+        "operationId" : "deleteVisit",
+        "parameters" : [ {
+          "name" : "visitId",
+          "in" : "path",
+          "description" : "Visit id to delete",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "Invalid ID supplied"
+          },
+          "404" : {
+            "description" : "Visit not found"
+          }
+        }
+      }
+    },
+    "/eprescription" : {
+      "get" : {
+        "tags" : [ "E-Prescriptions" ],
+        "summary" : "Get all e-prescriptions",
+        "operationId" : "getEPrescriptions",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/EPrescription"
+                  },
+                  "x-content-type" : "application/json"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "E-Prescriptions" ],
+        "summary" : "Add a new E-Prescriptions",
+        "operationId" : "addEPrescriptions",
+        "requestBody" : {
+          "description" : "E-Prescriptions object",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/EPrescription"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "405" : {
+            "description" : "Invalid input"
+          }
+        }
+      }
+    },
+    "/eprescription/{ePrescriptionId}" : {
+      "delete" : {
+        "tags" : [ "E-Prescriptions" ],
+        "summary" : "Deletes a E-Prescriptions",
+        "operationId" : "deleteEPrescriptions",
+        "parameters" : [ {
+          "name" : "ePrescriptionId",
+          "in" : "path",
+          "description" : "EPrescriptions id to delete",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "Invalid ID supplied"
+          },
+          "404" : {
+            "description" : "EPrescriptions not found"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Medicine" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string"
+          }
+        },
+        "example" : {
+          "id" : "id"
+        }
+      },
+      "User" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string"
+          }
+        },
+        "example" : {
+          "id" : "id"
+        }
+      },
+      "Visit" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string"
+          }
+        },
+        "example" : {
+          "id" : "id"
+        }
+      },
+      "EPrescription" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string"
+          }
+        },
+        "example" : {
+          "id" : "id"
+        }
+      }
+    }
+  }
+}
