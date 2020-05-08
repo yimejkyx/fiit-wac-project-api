@@ -33,6 +33,24 @@ namespace eu.fiit.PatientsPortal.Models
         public string Id { get; set; }
 
         /// <summary>
+        /// Gets or Sets Name
+        /// </summary>
+        [DataMember(Name="name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or Sets IsDoctor
+        /// </summary>
+        [DataMember(Name="isDoctor")]
+        public bool? IsDoctor { get; set; }
+
+        /// <summary>
+        /// Gets or Sets IsPatient
+        /// </summary>
+        [DataMember(Name="isPatient")]
+        public bool? IsPatient { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -41,6 +59,9 @@ namespace eu.fiit.PatientsPortal.Models
             var sb = new StringBuilder();
             sb.Append("class User {\n");
             sb.Append("  Id: ").Append(Id).Append("\n");
+            sb.Append("  Name: ").Append(Name).Append("\n");
+            sb.Append("  IsDoctor: ").Append(IsDoctor).Append("\n");
+            sb.Append("  IsPatient: ").Append(IsPatient).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -81,6 +102,21 @@ namespace eu.fiit.PatientsPortal.Models
                     Id == other.Id ||
                     Id != null &&
                     Id.Equals(other.Id)
+                ) && 
+                (
+                    Name == other.Name ||
+                    Name != null &&
+                    Name.Equals(other.Name)
+                ) && 
+                (
+                    IsDoctor == other.IsDoctor ||
+                    IsDoctor != null &&
+                    IsDoctor.Equals(other.IsDoctor)
+                ) && 
+                (
+                    IsPatient == other.IsPatient ||
+                    IsPatient != null &&
+                    IsPatient.Equals(other.IsPatient)
                 );
         }
 
@@ -96,6 +132,12 @@ namespace eu.fiit.PatientsPortal.Models
                 // Suitable nullity checks etc, of course :)
                     if (Id != null)
                     hashCode = hashCode * 59 + Id.GetHashCode();
+                    if (Name != null)
+                    hashCode = hashCode * 59 + Name.GetHashCode();
+                    if (IsDoctor != null)
+                    hashCode = hashCode * 59 + IsDoctor.GetHashCode();
+                    if (IsPatient != null)
+                    hashCode = hashCode * 59 + IsPatient.GetHashCode();
                 return hashCode;
             }
         }

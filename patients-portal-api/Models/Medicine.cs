@@ -33,6 +33,13 @@ namespace eu.fiit.PatientsPortal.Models
         public string Id { get; set; }
 
         /// <summary>
+        /// Gets or Sets Name
+        /// </summary>
+        [DataMember(Name="name")]
+        public string Name { get; set; }
+
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -41,6 +48,7 @@ namespace eu.fiit.PatientsPortal.Models
             var sb = new StringBuilder();
             sb.Append("class Medicine {\n");
             sb.Append("  Id: ").Append(Id).Append("\n");
+            sb.Append("  Name: ").Append(Name).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -81,6 +89,11 @@ namespace eu.fiit.PatientsPortal.Models
                     Id == other.Id ||
                     Id != null &&
                     Id.Equals(other.Id)
+                ) && 
+                (
+                    Name == other.Name ||
+                    Name != null &&
+                    Name.Equals(other.Name)
                 );
         }
 
@@ -96,6 +109,8 @@ namespace eu.fiit.PatientsPortal.Models
                 // Suitable nullity checks etc, of course :)
                     if (Id != null)
                     hashCode = hashCode * 59 + Id.GetHashCode();
+                    if (Name != null)
+                    hashCode = hashCode * 59 + Name.GetHashCode();
                 return hashCode;
             }
         }

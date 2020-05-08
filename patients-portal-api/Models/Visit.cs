@@ -33,14 +33,63 @@ namespace eu.fiit.PatientsPortal.Models
         public string Id { get; set; }
 
         /// <summary>
+        /// Gets or Sets Created
+        /// </summary>
+        [DataMember(Name="created")]
+        public DateTime? Created { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Date
+        /// </summary>
+        [DataMember(Name="date")]
+        public DateTime? Date { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Reason
+        /// </summary>
+        [DataMember(Name="reason")]
+        public string Reason { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Length
+        /// </summary>
+        [DataMember(Name="length")]
+        public string Length { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Result
+        /// </summary>
+        [DataMember(Name="result")]
+        public string Result { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Patient
+        /// </summary>
+        [DataMember(Name="patient")]
+        public User Patient { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Doctor
+        /// </summary>
+        [DataMember(Name="doctor")]
+        public User Doctor { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
         public override string ToString()
         {
-            var sb = new StringBuilder();
+           var sb = new StringBuilder();
             sb.Append("class Visit {\n");
             sb.Append("  Id: ").Append(Id).Append("\n");
+            sb.Append("  Created: ").Append(Created).Append("\n");
+            sb.Append("  Date: ").Append(Date).Append("\n");
+            sb.Append("  Reason: ").Append(Reason).Append("\n");
+            sb.Append("  Length: ").Append(Length).Append("\n");
+            sb.Append("  Result: ").Append(Result).Append("\n");
+            sb.Append("  Patient: ").Append(Patient).Append("\n");
+            sb.Append("  Doctor: ").Append(Doctor).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -81,6 +130,41 @@ namespace eu.fiit.PatientsPortal.Models
                     Id == other.Id ||
                     Id != null &&
                     Id.Equals(other.Id)
+                ) && 
+                (
+                    Created == other.Created ||
+                    Created != null &&
+                    Created.Equals(other.Created)
+                ) && 
+                (
+                    Date == other.Date ||
+                    Date != null &&
+                    Date.Equals(other.Date)
+                ) && 
+                (
+                    Reason == other.Reason ||
+                    Reason != null &&
+                    Reason.Equals(other.Reason)
+                ) && 
+                (
+                    Length == other.Length ||
+                    Length != null &&
+                    Length.Equals(other.Length)
+                ) && 
+                (
+                    Result == other.Result ||
+                    Result != null &&
+                    Result.Equals(other.Result)
+                ) && 
+                (
+                    Patient == other.Patient ||
+                    Patient != null &&
+                    Patient.Equals(other.Patient)
+                ) && 
+                (
+                    Doctor == other.Doctor ||
+                    Doctor != null &&
+                    Doctor.Equals(other.Doctor)
                 );
         }
 
@@ -96,6 +180,20 @@ namespace eu.fiit.PatientsPortal.Models
                 // Suitable nullity checks etc, of course :)
                     if (Id != null)
                     hashCode = hashCode * 59 + Id.GetHashCode();
+                    if (Created != null)
+                    hashCode = hashCode * 59 + Created.GetHashCode();
+                    if (Date != null)
+                    hashCode = hashCode * 59 + Date.GetHashCode();
+                    if (Reason != null)
+                    hashCode = hashCode * 59 + Reason.GetHashCode();
+                    if (Length != null)
+                    hashCode = hashCode * 59 + Length.GetHashCode();
+                    if (Result != null)
+                    hashCode = hashCode * 59 + Result.GetHashCode();
+                    if (Patient != null)
+                    hashCode = hashCode * 59 + Patient.GetHashCode();
+                    if (Doctor != null)
+                    hashCode = hashCode * 59 + Doctor.GetHashCode();
                 return hashCode;
             }
         }

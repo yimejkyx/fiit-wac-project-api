@@ -33,6 +33,48 @@ namespace eu.fiit.PatientsPortal.Models
         public string Id { get; set; }
 
         /// <summary>
+        /// Gets or Sets Created
+        /// </summary>
+        [DataMember(Name="created")]
+        public DateTime? Created { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Medicines
+        /// </summary>
+        [DataMember(Name="medicines")]
+        public List<Medicine> Medicines { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Reason
+        /// </summary>
+        [DataMember(Name="reason")]
+        public string Reason { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Expiration
+        /// </summary>
+        [DataMember(Name="expiration")]
+        public DateTime? Expiration { get; set; }
+
+        /// <summary>
+        /// Gets or Sets State
+        /// </summary>
+        [DataMember(Name="state")]
+        public string State { get; set; }
+
+        /// <summary>
+        /// Gets or Sets PatientId
+        /// </summary>
+        [DataMember(Name="patientId")]
+        public string PatientId { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Prescription
+        /// </summary>
+        [DataMember(Name="prescription")]
+        public string Prescription { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -41,6 +83,13 @@ namespace eu.fiit.PatientsPortal.Models
             var sb = new StringBuilder();
             sb.Append("class EPrescription {\n");
             sb.Append("  Id: ").Append(Id).Append("\n");
+            sb.Append("  Created: ").Append(Created).Append("\n");
+            sb.Append("  Medicines: ").Append(Medicines).Append("\n");
+            sb.Append("  Reason: ").Append(Reason).Append("\n");
+            sb.Append("  Expiration: ").Append(Expiration).Append("\n");
+            sb.Append("  State: ").Append(State).Append("\n");
+            sb.Append("  PatientId: ").Append(PatientId).Append("\n");
+            sb.Append("  Prescription: ").Append(Prescription).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -81,6 +130,41 @@ namespace eu.fiit.PatientsPortal.Models
                     Id == other.Id ||
                     Id != null &&
                     Id.Equals(other.Id)
+                ) && 
+                (
+                    Created == other.Created ||
+                    Created != null &&
+                    Created.Equals(other.Created)
+                ) && 
+                (
+                    Medicines == other.Medicines ||
+                    Medicines != null &&
+                    Medicines.SequenceEqual(other.Medicines)
+                ) && 
+                (
+                    Reason == other.Reason ||
+                    Reason != null &&
+                    Reason.Equals(other.Reason)
+                ) && 
+                (
+                    Expiration == other.Expiration ||
+                    Expiration != null &&
+                    Expiration.Equals(other.Expiration)
+                ) && 
+                (
+                    State == other.State ||
+                    State != null &&
+                    State.Equals(other.State)
+                ) && 
+                (
+                    PatientId == other.PatientId ||
+                    PatientId != null &&
+                    PatientId.Equals(other.PatientId)
+                ) && 
+                (
+                    Prescription == other.Prescription ||
+                    Prescription != null &&
+                    Prescription.Equals(other.Prescription)
                 );
         }
 
@@ -96,6 +180,20 @@ namespace eu.fiit.PatientsPortal.Models
                 // Suitable nullity checks etc, of course :)
                     if (Id != null)
                     hashCode = hashCode * 59 + Id.GetHashCode();
+                    if (Created != null)
+                    hashCode = hashCode * 59 + Created.GetHashCode();
+                    if (Medicines != null)
+                    hashCode = hashCode * 59 + Medicines.GetHashCode();
+                    if (Reason != null)
+                    hashCode = hashCode * 59 + Reason.GetHashCode();
+                    if (Expiration != null)
+                    hashCode = hashCode * 59 + Expiration.GetHashCode();
+                    if (State != null)
+                    hashCode = hashCode * 59 + State.GetHashCode();
+                    if (PatientId != null)
+                    hashCode = hashCode * 59 + PatientId.GetHashCode();
+                    if (Prescription != null)
+                    hashCode = hashCode * 59 + Prescription.GetHashCode();
                 return hashCode;
             }
         }
