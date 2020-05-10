@@ -13,7 +13,7 @@
     "version" : "1.0.0"
   },
   "servers" : [ {
-    "url" : "https://virtserver.swaggerhub.com/yimejky/PatientsPortal/1.0.0",
+    "url" : "https://virtserver.swaggerhub.com/api",
     "description" : "SwaggerHub API Auto Mocking"
   } ],
   "tags" : [ {

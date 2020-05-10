@@ -18,6 +18,7 @@ using eu.fiit.PatientsPortal.Attributes;
 
 using Microsoft.AspNetCore.Authorization;
 using eu.fiit.PatientsPortal.Models;
+using eu.fiit.PatientsPortal.Services;
 
 namespace eu.fiit.PatientsPortal.Controllers
 { 
@@ -27,42 +28,53 @@ namespace eu.fiit.PatientsPortal.Controllers
     [ApiController]
     public class EPrescriptionsApiController : ControllerBase
     { 
+         private readonly IDataRepository repository;
+
+        /// <summary/>
+        public EPrescriptionsApiController(IDataRepository repository)
+            => this.repository = repository;
+
         /// <summary>
         /// Add a new E-Prescriptions
         /// </summary>
         /// <param name="body">E-Prescriptions object</param>
         /// <response code="405">Invalid input</response>
+        /// <response code="200">successful operation</response>
         [HttpPost]
-        [Route("/yimejky/PatientsPortal/1.0.0/eprescription")]
+        [Route("/api/eprescription")]
         [ValidateModelState]
         [SwaggerOperation("AddEPrescriptions")]
         public virtual IActionResult AddEPrescriptions([FromBody]EPrescription body)
         { 
-            //TODO: Uncomment the next line to return response 405 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(405);
+            if(body.Id == null) { return new BadRequestResult(); }
 
-            throw new NotImplementedException();
+            var exist = this.repository.GetEPrescriptionData(body.Id);
+
+            if (exist!= null){ 
+                 return new BadRequestResult();
+            }
+
+            this.repository.UpsertEPrescriptionData(body);
+            return StatusCode(200, body);
         }
 
         /// <summary>
         /// Deletes a E-Prescriptions
         /// </summary>
         /// <param name="ePrescriptionId">EPrescriptions id to delete</param>
-        /// <response code="400">Invalid ID supplied</response>
         /// <response code="404">EPrescriptions not found</response>
+        /// <response code="200">successful operation</response>
         [HttpDelete]
-        [Route("/yimejky/PatientsPortal/1.0.0/eprescription/{ePrescriptionId}")]
+        [Route("/api/eprescription/{ePrescriptionId}")]
         [ValidateModelState]
         [SwaggerOperation("DeleteEPrescriptions")]
-        public virtual IActionResult DeleteEPrescriptions([FromRoute][Required]long? ePrescriptionId)
+        public virtual IActionResult DeleteEPrescriptions([FromRoute][Required]string? ePrescriptionId)
         { 
-            //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(400);
+            var eprescription = this.repository.GetEPrescriptionData(ePrescriptionId);
+            if( eprescription == null) { return new NotFoundResult(); }
+            this.repository.DeleteEPrescrition(ePrescriptionId);
 
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404);
-
-            throw new NotImplementedException();
+            return new OkResult();
         }
 
         /// <summary>
@@ -70,21 +82,14 @@ namespace eu.fiit.PatientsPortal.Controllers
         /// </summary>
         /// <response code="200">successful operation</response>
         [HttpGet]
-        [Route("/yimejky/PatientsPortal/1.0.0/eprescription")]
+        [Route("/api/eprescription")]
         [ValidateModelState]
         [SwaggerOperation("GetEPrescriptions")]
-        [SwaggerResponse(statusCode: 200, type: typeof(List<EPrescription>), description: "successful operation")]
+        [SwaggerResponse(statusCode: 200, type: typeof(IEnumerable<EPrescription>), description: "successful operation")]
         public virtual IActionResult GetEPrescriptions()
         { 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default(List<EPrescription>));
-            string exampleJson = null;
-            exampleJson = "[ {\n  \"id\" : \"id\"\n}, {\n  \"id\" : \"id\"\n} ]";
-            
-                        var example = exampleJson != null
-                        ? JsonConvert.DeserializeObject<List<EPrescription>>(exampleJson)
-                        : default(List<EPrescription>);            //TODO: Change the data returned
-            return new ObjectResult(example);
+            IEnumerable<EPrescription> ePrescriptions = this.repository.GetEPrescriptionData();
+            return StatusCode(200, ePrescriptions);
         }
     }
 }

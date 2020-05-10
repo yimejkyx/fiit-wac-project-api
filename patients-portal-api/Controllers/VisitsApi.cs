@@ -18,30 +18,44 @@ using eu.fiit.PatientsPortal.Attributes;
 
 using Microsoft.AspNetCore.Authorization;
 using eu.fiit.PatientsPortal.Models;
+using eu.fiit.PatientsPortal.Services;
 
 namespace eu.fiit.PatientsPortal.Controllers
-{ 
+{
     /// <summary>
     /// 
     /// </summary>
     [ApiController]
     public class VisitsApiController : ControllerBase
-    { 
+    {
+        private readonly IDataRepository repository;
+
+        /// <summary/>
+        public VisitsApiController(IDataRepository repository)
+            => this.repository = repository;
+
         /// <summary>
         /// Add a new Visit
         /// </summary>
         /// <param name="body">Visit object</param>
         /// <response code="405">Invalid input</response>
         [HttpPost]
-        [Route("/yimejky/PatientsPortal/1.0.0/visits")]
+        [Route("/api/visits")]
         [ValidateModelState]
         [SwaggerOperation("AddVisit")]
-        public virtual IActionResult AddVisit([FromBody]Visit body)
-        { 
-            //TODO: Uncomment the next line to return response 405 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(405);
+        public virtual IActionResult AddVisit([FromBody] Visit body)
+        {
+            if (body.Id == null) { return new BadRequestResult(); }
 
-            throw new NotImplementedException();
+            var exist = this.repository.GetVisitData(body.Id);
+
+            if (exist != null)
+            {
+                return new BadRequestResult();
+            }
+
+            this.repository.UpsertVisitData(body);
+            return StatusCode(200, body);
         }
 
         /// <summary>
@@ -51,18 +65,16 @@ namespace eu.fiit.PatientsPortal.Controllers
         /// <response code="400">Invalid ID supplied</response>
         /// <response code="404">Visit not found</response>
         [HttpDelete]
-        [Route("/yimejky/PatientsPortal/1.0.0/visits/{visitId}")]
+        [Route("/api/visits/{visitId}")]
         [ValidateModelState]
         [SwaggerOperation("DeleteVisit")]
-        public virtual IActionResult DeleteVisit([FromRoute][Required]long? visitId)
-        { 
-            //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(400);
+        public virtual IActionResult DeleteVisit([FromRoute][Required] string? visitId)
+        {
+            var visit = this.repository.GetVisitData(visitId);
+            if (visit == null) { return new NotFoundResult(); }
+            this.repository.DeleteVisit(visitId);
 
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404);
-
-            throw new NotImplementedException();
+            return new OkResult();
         }
 
         /// <summary>
@@ -70,42 +82,35 @@ namespace eu.fiit.PatientsPortal.Controllers
         /// </summary>
         /// <response code="200">successful operation</response>
         [HttpGet]
-        [Route("/yimejky/PatientsPortal/1.0.0/visits")]
+        [Route("/api/visits")]
         [ValidateModelState]
         [SwaggerOperation("GetVisits")]
-        [SwaggerResponse(statusCode: 200, type: typeof(List<Visit>), description: "successful operation")]
+        [SwaggerResponse(statusCode: 200, type: typeof(IEnumerable<Visit>), description: "successful operation")]
         public virtual IActionResult GetVisits()
-        { 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default(List<Visit>));
-            string exampleJson = null;
-            exampleJson = "[ {\n  \"id\" : \"id\"\n}, {\n  \"id\" : \"id\"\n} ]";
-            
-                        var example = exampleJson != null
-                        ? JsonConvert.DeserializeObject<List<Visit>>(exampleJson)
-                        : default(List<Visit>);            //TODO: Change the data returned
-            return new ObjectResult(example);
+        {
+            IEnumerable<Visit> visits = this.repository.GetVisitsData();
+            return StatusCode(200, visits);
         }
 
         /// <summary>
         /// Update an existing Visit
         /// </summary>
+        /// <param name="visitId">Visit id to update</param>
         /// <param name="body">Visit object</param>
         /// <response code="400">Invalid ID supplied</response>
         /// <response code="404">Visit not found</response>
         [HttpPut]
-        [Route("/yimejky/PatientsPortal/1.0.0/visits")]
+        [Route("/api/visits/{visitId}")]
         [ValidateModelState]
         [SwaggerOperation("UpdateVisit")]
-        public virtual IActionResult UpdateVisit([FromBody]Visit body)
-        { 
-            //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(400);
+        public virtual IActionResult UpdateVisit([FromRoute][Required] string visitId, [FromBody] Visit body)
+        {
+            if (!visitId.Equals(body.Id)) { return new BadRequestResult(); }
+            var exists = this.repository.GetVisitData(visitId);
+            if (exists == null) { return new NotFoundResult(); }
 
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404);
-
-            throw new NotImplementedException();
+            this.repository.UpsertVisitData(body);
+            return StatusCode(200, body);
         }
     }
 }

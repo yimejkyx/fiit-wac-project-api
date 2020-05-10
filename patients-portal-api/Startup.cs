@@ -51,6 +51,17 @@ namespace eu.fiit.PatientsPortal
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
+            services
+                .AddMvc()
+                .AddNewtonsoftJson(opts =>
+                {
+                    opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                    opts.SerializerSettings.Converters.Add(new StringEnumConverter {
+                        NamingStrategy = new CamelCaseNamingStrategy()
+                    });
+                });
+
+            services.AddDataRepository();
             services.AddMvc(option => option.EnableEndpointRouting = false).AddNewtonsoftJson();
 
             services

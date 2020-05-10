@@ -27,26 +27,43 @@ namespace eu.fiit.PatientsPortal.Controllers
     [ApiController]
     public class MedicinesApiController : ControllerBase
     { 
+
+        private IList<Medicine> _medicines;
+
+        ///<Summary>
+        /// Gets the answer
+        ///</Summary>
+        public MedicinesApiController() =>
+            this._medicines = new List<Medicine>{
+                new Medicine{
+                    Id = "1",
+                    Name = "Paralen"               
+                },
+                new Medicine{
+                    Id = "2",
+                    Name = "Ibalgin"               
+                },
+                new Medicine{
+                    Id = "3",
+                    Name = "Voltaren"               
+                },
+                new Medicine{
+                    Id = "4",
+                    Name = "Valetol"               
+                }};
+        
         /// <summary>
         /// Get all medicines
         /// </summary>
         /// <response code="200">successful operation</response>
         [HttpGet]
-        [Route("/yimejky/PatientsPortal/1.0.0/medicines")]
+        [Route("/api/medicines")]
         [ValidateModelState]
         [SwaggerOperation("GetMedicines")]
         [SwaggerResponse(statusCode: 200, type: typeof(List<Medicine>), description: "successful operation")]
         public virtual IActionResult GetMedicines()
         { 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default(List<Medicine>));
-            string exampleJson = null;
-            exampleJson = "[ {\n  \"id\" : \"id\"\n}, {\n  \"id\" : \"id\"\n} ]";
-            
-                        var example = exampleJson != null
-                        ? JsonConvert.DeserializeObject<List<Medicine>>(exampleJson)
-                        : default(List<Medicine>);            //TODO: Change the data returned
-            return new ObjectResult(example);
+            return StatusCode(200, _medicines);
         }
     }
 }

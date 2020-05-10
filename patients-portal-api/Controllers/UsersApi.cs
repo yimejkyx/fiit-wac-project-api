@@ -27,26 +27,44 @@ namespace eu.fiit.PatientsPortal.Controllers
     [ApiController]
     public class UsersApiController : ControllerBase
     { 
+        private IList<User> _users;
+
+        ///<Summary>
+        /// Gets the answer
+        ///</Summary>
+        public UsersApiController() =>
+            this._users = new List<User>{
+                new User{
+                    Id = "1",
+                    Name = "Kamil Dzurman",
+                    IsDoctor = true,
+                    IsPatient = false               
+                },
+                new User{
+                    Id = "2",
+                    Name = "Matej Cief",
+                    IsDoctor = true,
+                    IsPatient = false              
+                },
+                new User{
+                    Id = "3",
+                    Name = "Ivan Hrozny",
+                    IsDoctor = false,
+                    IsPatient = true              
+                },};
+
         /// <summary>
         /// Get all users
         /// </summary>
         /// <response code="200">successful operation</response>
         [HttpGet]
-        [Route("/yimejky/PatientsPortal/1.0.0/users")]
+        [Route("/api/users")]
         [ValidateModelState]
         [SwaggerOperation("GetUsers")]
         [SwaggerResponse(statusCode: 200, type: typeof(List<User>), description: "successful operation")]
         public virtual IActionResult GetUsers()
         { 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default(List<User>));
-            string exampleJson = null;
-            exampleJson = "[ {\n  \"id\" : \"id\"\n}, {\n  \"id\" : \"id\"\n} ]";
-            
-                        var example = exampleJson != null
-                        ? JsonConvert.DeserializeObject<List<User>>(exampleJson)
-                        : default(List<User>);            //TODO: Change the data returned
-            return new ObjectResult(example);
+            return StatusCode(200, _users);
         }
     }
 }
