@@ -20,13 +20,13 @@ using Microsoft.AspNetCore.Authorization;
 using eu.fiit.PatientsPortal.Models;
 
 namespace eu.fiit.PatientsPortal.Controllers
-{ 
+{
     /// <summary>
     /// 
     /// </summary>
     [ApiController]
     public class UsersApiController : ControllerBase
-    { 
+    {
         private IList<User> _users;
 
         ///<Summary>
@@ -35,22 +35,22 @@ namespace eu.fiit.PatientsPortal.Controllers
         public UsersApiController() =>
             this._users = new List<User>{
                 new User{
-                    Id = "1",
+                    Id = 1,
                     Name = "Kamil Dzurman",
                     IsDoctor = true,
-                    IsPatient = false               
+                    IsPatient = false
                 },
                 new User{
-                    Id = "2",
+                    Id = 2,
                     Name = "Matej Cief",
                     IsDoctor = true,
-                    IsPatient = false              
+                    IsPatient = false
                 },
                 new User{
-                    Id = "3",
+                    Id = 3,
                     Name = "Ivan Hrozny",
                     IsDoctor = false,
-                    IsPatient = true              
+                    IsPatient = true
                 },};
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace eu.fiit.PatientsPortal.Controllers
         [SwaggerOperation("GetUsers")]
         [SwaggerResponse(statusCode: 200, type: typeof(List<User>), description: "successful operation")]
         public virtual IActionResult GetUsers()
-        { 
+        {
             return StatusCode(200, _users);
         }
     }

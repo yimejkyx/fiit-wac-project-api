@@ -21,14 +21,14 @@ using eu.fiit.PatientsPortal.Models;
 using eu.fiit.PatientsPortal.Services;
 
 namespace eu.fiit.PatientsPortal.Controllers
-{ 
+{
     /// <summary>
     /// 
     /// </summary>
     [ApiController]
     public class EPrescriptionsApiController : ControllerBase
-    { 
-         private readonly IDataRepository repository;
+    {
+        private readonly IDataRepository repository;
 
         /// <summary/>
         public EPrescriptionsApiController(IDataRepository repository)
@@ -44,16 +44,8 @@ namespace eu.fiit.PatientsPortal.Controllers
         [Route("/api/eprescription")]
         [ValidateModelState]
         [SwaggerOperation("AddEPrescriptions")]
-        public virtual IActionResult AddEPrescriptions([FromBody]EPrescription body)
-        { 
-            if(body.Id == null) { return new BadRequestResult(); }
-
-            var exist = this.repository.GetEPrescriptionData(body.Id);
-
-            if (exist!= null){ 
-                 return new BadRequestResult();
-            }
-
+        public virtual IActionResult AddEPrescriptions([FromBody] EPrescription body)
+        {
             this.repository.UpsertEPrescriptionData(body);
             return StatusCode(200, body);
         }
@@ -68,12 +60,11 @@ namespace eu.fiit.PatientsPortal.Controllers
         [Route("/api/eprescription/{ePrescriptionId}")]
         [ValidateModelState]
         [SwaggerOperation("DeleteEPrescriptions")]
-        public virtual IActionResult DeleteEPrescriptions([FromRoute][Required]string? ePrescriptionId)
-        { 
+        public virtual IActionResult DeleteEPrescriptions([FromRoute][Required] int ePrescriptionId)
+        {
             var eprescription = this.repository.GetEPrescriptionData(ePrescriptionId);
-            if( eprescription == null) { return new NotFoundResult(); }
+            if (eprescription == null) { return new NotFoundResult(); }
             this.repository.DeleteEPrescrition(ePrescriptionId);
-
             return new OkResult();
         }
 
@@ -87,7 +78,7 @@ namespace eu.fiit.PatientsPortal.Controllers
         [SwaggerOperation("GetEPrescriptions")]
         [SwaggerResponse(statusCode: 200, type: typeof(IEnumerable<EPrescription>), description: "successful operation")]
         public virtual IActionResult GetEPrescriptions()
-        { 
+        {
             IEnumerable<EPrescription> ePrescriptions = this.repository.GetEPrescriptionData();
             return StatusCode(200, ePrescriptions);
         }

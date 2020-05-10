@@ -45,15 +45,6 @@ namespace eu.fiit.PatientsPortal.Controllers
         [SwaggerOperation("AddVisit")]
         public virtual IActionResult AddVisit([FromBody] Visit body)
         {
-            if (body.Id == null) { return new BadRequestResult(); }
-
-            var exist = this.repository.GetVisitData(body.Id);
-
-            if (exist != null)
-            {
-                return new BadRequestResult();
-            }
-
             this.repository.UpsertVisitData(body);
             return StatusCode(200, body);
         }
@@ -68,12 +59,11 @@ namespace eu.fiit.PatientsPortal.Controllers
         [Route("/api/visits/{visitId}")]
         [ValidateModelState]
         [SwaggerOperation("DeleteVisit")]
-        public virtual IActionResult DeleteVisit([FromRoute][Required] string? visitId)
+        public virtual IActionResult DeleteVisit([FromRoute][Required] int visitId)
         {
             var visit = this.repository.GetVisitData(visitId);
             if (visit == null) { return new NotFoundResult(); }
             this.repository.DeleteVisit(visitId);
-
             return new OkResult();
         }
 
@@ -103,12 +93,11 @@ namespace eu.fiit.PatientsPortal.Controllers
         [Route("/api/visits/{visitId}")]
         [ValidateModelState]
         [SwaggerOperation("UpdateVisit")]
-        public virtual IActionResult UpdateVisit([FromRoute][Required] string visitId, [FromBody] Visit body)
+        public virtual IActionResult UpdateVisit([FromRoute][Required] int visitId, [FromBody] Visit body)
         {
             if (!visitId.Equals(body.Id)) { return new BadRequestResult(); }
             var exists = this.repository.GetVisitData(visitId);
             if (exists == null) { return new NotFoundResult(); }
-
             this.repository.UpsertVisitData(body);
             return StatusCode(200, body);
         }

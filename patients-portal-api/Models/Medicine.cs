@@ -19,23 +19,23 @@ using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
 namespace eu.fiit.PatientsPortal.Models
-{ 
+{
     /// <summary>
     /// 
     /// </summary>
     [DataContract]
     public partial class Medicine : IEquatable<Medicine>
-    { 
+    {
         /// <summary>
         /// Gets or Sets Id
         /// </summary>
-        [DataMember(Name="id")]
-        public string Id { get; set; }
+        [DataMember(Name = "id")]
+        public int? Id { get; set; }
 
         /// <summary>
         /// Gets or Sets Name
         /// </summary>
-        [DataMember(Name="name")]
+        [DataMember(Name = "name")]
         public string Name { get; set; }
 
 
@@ -84,12 +84,12 @@ namespace eu.fiit.PatientsPortal.Models
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
 
-            return 
+            return
                 (
                     Id == other.Id ||
                     Id != null &&
                     Id.Equals(other.Id)
-                ) && 
+                ) &&
                 (
                     Name == other.Name ||
                     Name != null &&
@@ -107,16 +107,16 @@ namespace eu.fiit.PatientsPortal.Models
             {
                 var hashCode = 41;
                 // Suitable nullity checks etc, of course :)
-                    if (Id != null)
+                if (Id != null)
                     hashCode = hashCode * 59 + Id.GetHashCode();
-                    if (Name != null)
+                if (Name != null)
                     hashCode = hashCode * 59 + Name.GetHashCode();
                 return hashCode;
             }
         }
 
         #region Operators
-        #pragma warning disable 1591
+#pragma warning disable 1591
 
         public static bool operator ==(Medicine left, Medicine right)
         {
@@ -128,7 +128,7 @@ namespace eu.fiit.PatientsPortal.Models
             return !Equals(left, right);
         }
 
-        #pragma warning restore 1591
+#pragma warning restore 1591
         #endregion Operators
     }
 }

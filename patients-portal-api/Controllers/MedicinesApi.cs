@@ -20,13 +20,13 @@ using Microsoft.AspNetCore.Authorization;
 using eu.fiit.PatientsPortal.Models;
 
 namespace eu.fiit.PatientsPortal.Controllers
-{ 
+{
     /// <summary>
     /// 
     /// </summary>
     [ApiController]
     public class MedicinesApiController : ControllerBase
-    { 
+    {
 
         private IList<Medicine> _medicines;
 
@@ -36,22 +36,22 @@ namespace eu.fiit.PatientsPortal.Controllers
         public MedicinesApiController() =>
             this._medicines = new List<Medicine>{
                 new Medicine{
-                    Id = "1",
-                    Name = "Paralen"               
+                    Id = 1,
+                    Name = "Paralen"
                 },
                 new Medicine{
-                    Id = "2",
-                    Name = "Ibalgin"               
+                    Id = 2,
+                    Name = "Ibalgin"
                 },
                 new Medicine{
-                    Id = "3",
-                    Name = "Voltaren"               
+                    Id = 3,
+                    Name = "Voltaren"
                 },
                 new Medicine{
-                    Id = "4",
-                    Name = "Valetol"               
+                    Id = 4,
+                    Name = "Valetol"
                 }};
-        
+
         /// <summary>
         /// Get all medicines
         /// </summary>
@@ -62,7 +62,7 @@ namespace eu.fiit.PatientsPortal.Controllers
         [SwaggerOperation("GetMedicines")]
         [SwaggerResponse(statusCode: 200, type: typeof(List<Medicine>), description: "successful operation")]
         public virtual IActionResult GetMedicines()
-        { 
+        {
             return StatusCode(200, _medicines);
         }
     }

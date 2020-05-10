@@ -19,35 +19,35 @@ using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
 namespace eu.fiit.PatientsPortal.Models
-{ 
+{
     /// <summary>
     /// 
     /// </summary>
     [DataContract]
     public partial class User : IEquatable<User>
-    { 
+    {
         /// <summary>
         /// Gets or Sets Id
         /// </summary>
-        [DataMember(Name="id")]
-        public string Id { get; set; }
+        [DataMember(Name = "id")]
+        public int? Id { get; set; }
 
         /// <summary>
         /// Gets or Sets Name
         /// </summary>
-        [DataMember(Name="name")]
+        [DataMember(Name = "name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or Sets IsDoctor
         /// </summary>
-        [DataMember(Name="isDoctor")]
+        [DataMember(Name = "isDoctor")]
         public bool? IsDoctor { get; set; }
 
         /// <summary>
         /// Gets or Sets IsPatient
         /// </summary>
-        [DataMember(Name="isPatient")]
+        [DataMember(Name = "isPatient")]
         public bool? IsPatient { get; set; }
 
         /// <summary>
@@ -97,22 +97,22 @@ namespace eu.fiit.PatientsPortal.Models
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
 
-            return 
+            return
                 (
                     Id == other.Id ||
                     Id != null &&
                     Id.Equals(other.Id)
-                ) && 
+                ) &&
                 (
                     Name == other.Name ||
                     Name != null &&
                     Name.Equals(other.Name)
-                ) && 
+                ) &&
                 (
                     IsDoctor == other.IsDoctor ||
                     IsDoctor != null &&
                     IsDoctor.Equals(other.IsDoctor)
-                ) && 
+                ) &&
                 (
                     IsPatient == other.IsPatient ||
                     IsPatient != null &&
@@ -130,20 +130,20 @@ namespace eu.fiit.PatientsPortal.Models
             {
                 var hashCode = 41;
                 // Suitable nullity checks etc, of course :)
-                    if (Id != null)
+                if (Id != null)
                     hashCode = hashCode * 59 + Id.GetHashCode();
-                    if (Name != null)
+                if (Name != null)
                     hashCode = hashCode * 59 + Name.GetHashCode();
-                    if (IsDoctor != null)
+                if (IsDoctor != null)
                     hashCode = hashCode * 59 + IsDoctor.GetHashCode();
-                    if (IsPatient != null)
+                if (IsPatient != null)
                     hashCode = hashCode * 59 + IsPatient.GetHashCode();
                 return hashCode;
             }
         }
 
         #region Operators
-        #pragma warning disable 1591
+#pragma warning disable 1591
 
         public static bool operator ==(User left, User right)
         {
@@ -155,7 +155,7 @@ namespace eu.fiit.PatientsPortal.Models
             return !Equals(left, right);
         }
 
-        #pragma warning restore 1591
+#pragma warning restore 1591
         #endregion Operators
     }
 }

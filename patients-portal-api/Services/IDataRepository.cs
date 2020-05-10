@@ -19,7 +19,7 @@ namespace eu.fiit.PatientsPortal.Services
         /// </summary>
         /// <param name="visitId">id of the visit</param>
         /// <returns>visit details</returns>
-        Visit GetVisitData(string visitId);
+        Visit GetVisitData(int visitId);
 
         /// <summary>
         /// Provides details about all visits
@@ -38,14 +38,14 @@ namespace eu.fiit.PatientsPortal.Services
         /// Deletes details about specific visit
         /// </summary>
         /// <param name="visitId">id of the visit</param>
-        void DeleteVisit(string visitId);
+        void DeleteVisit(int visitId);
 
         /// <summary>
         /// Provides details about specific ePrescription
         /// </summary>
         /// <param name="ePrescriptionId">id of the ePrescription</param>
         /// <returns>ePrescription details</returns>
-        EPrescription GetEPrescriptionData(string ePrescriptionId);
+        EPrescription GetEPrescriptionData(int ePrescriptionId);
 
         /// <summary>
         /// Provides details about all ePrescriptions
@@ -56,15 +56,15 @@ namespace eu.fiit.PatientsPortal.Services
         /// <summary>
         /// Updates or inserts details about specific/new ePrescription
         /// </summary>
-        /// <param name="ePrescriptionId">ePrescription data</param>
+        /// <param name="ePrescription">ePrescription data</param>
         /// <returns>ePrescription instance with correct id, if inserting</returns>
-        EPrescription UpsertEPrescriptionData(EPrescription ePrescriptionId);
+        EPrescription UpsertEPrescriptionData(EPrescription ePrescription);
 
         /// <summary>
         /// Deletes details about specific ePrescription
         /// </summary>
         /// <param name="ePrescriptionId">id of the ePrescription</param>
-        void DeleteEPrescrition(string ePrescriptionId);
+        void DeleteEPrescrition(int ePrescriptionId);
 
     }
 }

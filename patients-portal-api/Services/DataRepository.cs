@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using eu.fiit.PatientsPortal.Models;
 using LiteDB;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 
@@ -15,7 +15,7 @@ namespace eu.fiit.PatientsPortal.Services
         private static readonly string EPRESCRIPTIONS_COLLECTION = "eprescriptions";
 
         public DataRepository(
-            IHostingEnvironment environment, IConfiguration configuration)
+            IHostEnvironment environment, IConfiguration configuration)
         {
             string dbPath = configuration["DATA_REPOSITORY_DB"];
             if (dbPath == null || dbPath.Length == 0)
@@ -26,13 +26,13 @@ namespace eu.fiit.PatientsPortal.Services
             this.liteDb = new LiteDatabase(dbPath);
         }
 
-        public Visit GetVisitData(string visitId)
+        public Visit GetVisitData(int visitId)
         {
             var collection = this.liteDb.GetCollection<Visit>(VISITS_COLLECTION);
             return collection.FindById(visitId);
         }
 
-        
+
         public IEnumerable<Visit> GetVisitsData()
         {
             var collection = this.liteDb.GetCollection<Visit>(VISITS_COLLECTION);
@@ -42,31 +42,30 @@ namespace eu.fiit.PatientsPortal.Services
         public Visit UpsertVisitData(Visit visit)
         {
             var collection = this.liteDb.GetCollection<Visit>(VISITS_COLLECTION);
-            var existing = collection.FindById(visit.Id);
-            if(existing == null)
+            if (visit.Id == null)
             {
+                visit.Id = 0;
                 var idValue = collection.Insert(visit);
-                visit.Id = idValue.AsString;
+                visit.Id = idValue.AsInt32;
             }
             else
             {
-
-                collection.Update(visit);
-                System.Console.WriteLine(existing.Reason);
-                System.Console.WriteLine("LOG pri update:");
-                System.Console.WriteLine(visit.Reason);
-                System.Console.WriteLine(collection.ToString());
+                var existing = collection.FindById(visit.Id);
+                if (existing == null)
+                {
+                    collection.Update(visit);
+                }
             }
             return visit;
         }
 
-        public void DeleteVisit(string visitId)
+        public void DeleteVisit(int visitId)
         {
             var collection = this.liteDb.GetCollection<Visit>(VISITS_COLLECTION);
             collection.Delete(visitId);
         }
 
-        public EPrescription GetEPrescriptionData(string ePrescriptionId)
+        public EPrescription GetEPrescriptionData(int ePrescriptionId)
         {
             var collection = this.liteDb.GetCollection<EPrescription>(EPRESCRIPTIONS_COLLECTION);
             return collection.FindById(ePrescriptionId);
@@ -82,13 +81,24 @@ namespace eu.fiit.PatientsPortal.Services
         public EPrescription UpsertEPrescriptionData(EPrescription ePrescription)
         {
             var collection = this.liteDb.GetCollection<EPrescription>(EPRESCRIPTIONS_COLLECTION);
-
-            var idValue = collection.Insert(ePrescription);
-            ePrescription.Id = idValue.AsString;
+            if (ePrescription.Id == null)
+            {
+                ePrescription.Id = 0;
+                var idValue = collection.Insert(ePrescription);
+                ePrescription.Id = idValue.AsInt32;
+            }
+            else
+            {
+                var existing = collection.FindById(ePrescription.Id);
+                if (existing == null)
+                {
+                    collection.Update(ePrescription);
+                }
+            }
             return ePrescription;
         }
 
-        public void DeleteEPrescrition(string ePrescriptionId)
+        public void DeleteEPrescrition(int ePrescriptionId)
         {
             var collection = this.liteDb.GetCollection<EPrescription>(EPRESCRIPTIONS_COLLECTION);
             collection.Delete(ePrescriptionId);

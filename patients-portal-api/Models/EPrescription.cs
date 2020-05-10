@@ -19,59 +19,59 @@ using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
 namespace eu.fiit.PatientsPortal.Models
-{ 
+{
     /// <summary>
     /// 
     /// </summary>
     [DataContract]
     public partial class EPrescription : IEquatable<EPrescription>
-    { 
+    {
         /// <summary>
         /// Gets or Sets Id
         /// </summary>
-        [DataMember(Name="id")]
-        public string Id { get; set; }
+        [DataMember(Name = "id")]
+        public int? Id { get; set; }
 
         /// <summary>
         /// Gets or Sets Created
         /// </summary>
-        [DataMember(Name="created")]
+        [DataMember(Name = "created")]
         public DateTime? Created { get; set; }
 
         /// <summary>
         /// Gets or Sets Medicines
         /// </summary>
-        [DataMember(Name="medicines")]
+        [DataMember(Name = "medicines")]
         public List<Medicine> Medicines { get; set; }
 
         /// <summary>
         /// Gets or Sets Reason
         /// </summary>
-        [DataMember(Name="reason")]
+        [DataMember(Name = "reason")]
         public string Reason { get; set; }
 
         /// <summary>
         /// Gets or Sets Expiration
         /// </summary>
-        [DataMember(Name="expiration")]
+        [DataMember(Name = "expiration")]
         public DateTime? Expiration { get; set; }
 
         /// <summary>
         /// Gets or Sets State
         /// </summary>
-        [DataMember(Name="state")]
+        [DataMember(Name = "state")]
         public string State { get; set; }
 
         /// <summary>
         /// Gets or Sets PatientId
         /// </summary>
-        [DataMember(Name="patientId")]
+        [DataMember(Name = "patientId")]
         public string PatientId { get; set; }
 
         /// <summary>
         /// Gets or Sets Prescription
         /// </summary>
-        [DataMember(Name="prescription")]
+        [DataMember(Name = "prescription")]
         public string Prescription { get; set; }
 
         /// <summary>
@@ -125,42 +125,42 @@ namespace eu.fiit.PatientsPortal.Models
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
 
-            return 
+            return
                 (
                     Id == other.Id ||
                     Id != null &&
                     Id.Equals(other.Id)
-                ) && 
+                ) &&
                 (
                     Created == other.Created ||
                     Created != null &&
                     Created.Equals(other.Created)
-                ) && 
+                ) &&
                 (
                     Medicines == other.Medicines ||
                     Medicines != null &&
                     Medicines.SequenceEqual(other.Medicines)
-                ) && 
+                ) &&
                 (
                     Reason == other.Reason ||
                     Reason != null &&
                     Reason.Equals(other.Reason)
-                ) && 
+                ) &&
                 (
                     Expiration == other.Expiration ||
                     Expiration != null &&
                     Expiration.Equals(other.Expiration)
-                ) && 
+                ) &&
                 (
                     State == other.State ||
                     State != null &&
                     State.Equals(other.State)
-                ) && 
+                ) &&
                 (
                     PatientId == other.PatientId ||
                     PatientId != null &&
                     PatientId.Equals(other.PatientId)
-                ) && 
+                ) &&
                 (
                     Prescription == other.Prescription ||
                     Prescription != null &&
@@ -178,28 +178,28 @@ namespace eu.fiit.PatientsPortal.Models
             {
                 var hashCode = 41;
                 // Suitable nullity checks etc, of course :)
-                    if (Id != null)
+                if (Id != null)
                     hashCode = hashCode * 59 + Id.GetHashCode();
-                    if (Created != null)
+                if (Created != null)
                     hashCode = hashCode * 59 + Created.GetHashCode();
-                    if (Medicines != null)
+                if (Medicines != null)
                     hashCode = hashCode * 59 + Medicines.GetHashCode();
-                    if (Reason != null)
+                if (Reason != null)
                     hashCode = hashCode * 59 + Reason.GetHashCode();
-                    if (Expiration != null)
+                if (Expiration != null)
                     hashCode = hashCode * 59 + Expiration.GetHashCode();
-                    if (State != null)
+                if (State != null)
                     hashCode = hashCode * 59 + State.GetHashCode();
-                    if (PatientId != null)
+                if (PatientId != null)
                     hashCode = hashCode * 59 + PatientId.GetHashCode();
-                    if (Prescription != null)
+                if (Prescription != null)
                     hashCode = hashCode * 59 + Prescription.GetHashCode();
                 return hashCode;
             }
         }
 
         #region Operators
-        #pragma warning disable 1591
+#pragma warning disable 1591
 
         public static bool operator ==(EPrescription left, EPrescription right)
         {
@@ -211,7 +211,7 @@ namespace eu.fiit.PatientsPortal.Models
             return !Equals(left, right);
         }
 
-        #pragma warning restore 1591
+#pragma warning restore 1591
         #endregion Operators
     }
 }

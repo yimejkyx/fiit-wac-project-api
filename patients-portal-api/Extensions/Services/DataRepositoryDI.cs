@@ -2,7 +2,8 @@ using eu.fiit.PatientsPortal.Services;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    static class DataRepositoryDI{
+    static class DataRepositoryDI
+    {
         /// supportive extension function for dependency
         /// injection of the service
         public static IServiceCollection AddDataRepository(

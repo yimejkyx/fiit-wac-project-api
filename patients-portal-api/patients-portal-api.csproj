@@ -7,6 +7,7 @@
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <AssemblyName>patients-portal-api</AssemblyName>
     <PackageId>patients-portal-api</PackageId>
+    <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="litedb" Version="5.0.7" />

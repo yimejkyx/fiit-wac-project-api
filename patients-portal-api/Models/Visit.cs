@@ -19,59 +19,59 @@ using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
 namespace eu.fiit.PatientsPortal.Models
-{ 
+{
     /// <summary>
     /// 
     /// </summary>
     [DataContract]
     public partial class Visit : IEquatable<Visit>
-    { 
+    {
         /// <summary>
         /// Gets or Sets Id
         /// </summary>
-        [DataMember(Name="id")]
-        public string Id { get; set; }
+        [DataMember(Name = "id")]
+        public int? Id { get; set; }
 
         /// <summary>
         /// Gets or Sets Created
         /// </summary>
-        [DataMember(Name="created")]
+        [DataMember(Name = "created")]
         public DateTime? Created { get; set; }
 
         /// <summary>
         /// Gets or Sets Date
         /// </summary>
-        [DataMember(Name="date")]
+        [DataMember(Name = "date")]
         public DateTime? Date { get; set; }
 
         /// <summary>
         /// Gets or Sets Reason
         /// </summary>
-        [DataMember(Name="reason")]
+        [DataMember(Name = "reason")]
         public string Reason { get; set; }
 
         /// <summary>
         /// Gets or Sets Length
         /// </summary>
-        [DataMember(Name="length")]
+        [DataMember(Name = "length")]
         public string Length { get; set; }
 
         /// <summary>
         /// Gets or Sets Result
         /// </summary>
-        [DataMember(Name="result")]
+        [DataMember(Name = "result")]
         public string Result { get; set; }
 
         /// <summary>
         /// Gets or Sets Patient
         /// </summary>
-        [DataMember(Name="patient")]
+        [DataMember(Name = "patient")]
         public User Patient { get; set; }
 
         /// <summary>
         /// Gets or Sets Doctor
         /// </summary>
-        [DataMember(Name="doctor")]
+        [DataMember(Name = "doctor")]
         public User Doctor { get; set; }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace eu.fiit.PatientsPortal.Models
         /// <returns>String presentation of the object</returns>
         public override string ToString()
         {
-           var sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("class Visit {\n");
             sb.Append("  Id: ").Append(Id).Append("\n");
             sb.Append("  Created: ").Append(Created).Append("\n");
@@ -125,42 +125,42 @@ namespace eu.fiit.PatientsPortal.Models
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
 
-            return 
+            return
                 (
                     Id == other.Id ||
                     Id != null &&
                     Id.Equals(other.Id)
-                ) && 
+                ) &&
                 (
                     Created == other.Created ||
                     Created != null &&
                     Created.Equals(other.Created)
-                ) && 
+                ) &&
                 (
                     Date == other.Date ||
                     Date != null &&
                     Date.Equals(other.Date)
-                ) && 
+                ) &&
                 (
                     Reason == other.Reason ||
                     Reason != null &&
                     Reason.Equals(other.Reason)
-                ) && 
+                ) &&
                 (
                     Length == other.Length ||
                     Length != null &&
                     Length.Equals(other.Length)
-                ) && 
+                ) &&
                 (
                     Result == other.Result ||
                     Result != null &&
                     Result.Equals(other.Result)
-                ) && 
+                ) &&
                 (
                     Patient == other.Patient ||
                     Patient != null &&
                     Patient.Equals(other.Patient)
-                ) && 
+                ) &&
                 (
                     Doctor == other.Doctor ||
                     Doctor != null &&
@@ -178,28 +178,28 @@ namespace eu.fiit.PatientsPortal.Models
             {
                 var hashCode = 41;
                 // Suitable nullity checks etc, of course :)
-                    if (Id != null)
+                if (Id != null)
                     hashCode = hashCode * 59 + Id.GetHashCode();
-                    if (Created != null)
+                if (Created != null)
                     hashCode = hashCode * 59 + Created.GetHashCode();
-                    if (Date != null)
+                if (Date != null)
                     hashCode = hashCode * 59 + Date.GetHashCode();
-                    if (Reason != null)
+                if (Reason != null)
                     hashCode = hashCode * 59 + Reason.GetHashCode();
-                    if (Length != null)
+                if (Length != null)
                     hashCode = hashCode * 59 + Length.GetHashCode();
-                    if (Result != null)
+                if (Result != null)
                     hashCode = hashCode * 59 + Result.GetHashCode();
-                    if (Patient != null)
+                if (Patient != null)
                     hashCode = hashCode * 59 + Patient.GetHashCode();
-                    if (Doctor != null)
+                if (Doctor != null)
                     hashCode = hashCode * 59 + Doctor.GetHashCode();
                 return hashCode;
             }
         }
 
         #region Operators
-        #pragma warning disable 1591
+#pragma warning disable 1591
 
         public static bool operator ==(Visit left, Visit right)
         {
@@ -211,7 +211,7 @@ namespace eu.fiit.PatientsPortal.Models
             return !Equals(left, right);
         }
 
-        #pragma warning restore 1591
+#pragma warning restore 1591
         #endregion Operators
     }
 }
