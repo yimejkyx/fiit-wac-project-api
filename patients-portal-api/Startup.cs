@@ -21,6 +21,8 @@ using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Cors;
 
 namespace eu.fiit.PatientsPortal
 {
@@ -50,19 +52,24 @@ namespace eu.fiit.PatientsPortal
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options => options.AddPolicy("ApiCorsPolicy", builder =>
+                {
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                }));
+
             // Add framework services.
             services
-                .AddMvc()
+                .AddMvc(option => option.EnableEndpointRouting = false)
                 .AddNewtonsoftJson(opts =>
                 {
                     opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                    opts.SerializerSettings.Converters.Add(new StringEnumConverter {
+                    opts.SerializerSettings.Converters.Add(new StringEnumConverter
+                    {
                         NamingStrategy = new CamelCaseNamingStrategy()
                     });
                 });
 
             services.AddDataRepository();
-            services.AddMvc(option => option.EnableEndpointRouting = false).AddNewtonsoftJson();
 
             services
                 .AddSwaggerGen(c =>
@@ -84,6 +91,7 @@ namespace eu.fiit.PatientsPortal
         /// <param name="loggerFactory"></param>
         public void Configure(IApplicationBuilder app, IHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            app.UseCors("ApiCorsPolicy");
             app
                 .UseMvc()
                 .UseDefaultFiles()
