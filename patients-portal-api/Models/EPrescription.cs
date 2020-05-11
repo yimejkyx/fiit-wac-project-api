@@ -63,16 +63,16 @@ namespace eu.fiit.PatientsPortal.Models
         public string State { get; set; }
 
         /// <summary>
-        /// Gets or Sets PatientId
+        /// Gets or Sets Patient
         /// </summary>
-        [DataMember(Name = "patientId")]
-        public string PatientId { get; set; }
+        [DataMember(Name = "patient")]
+        public User Patient { get; set; }
 
         /// <summary>
-        /// Gets or Sets Prescription
+        /// Gets or Sets Doctor
         /// </summary>
-        [DataMember(Name = "prescription")]
-        public string Prescription { get; set; }
+        [DataMember(Name = "doctor")]
+        public User Doctor { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -88,8 +88,8 @@ namespace eu.fiit.PatientsPortal.Models
             sb.Append("  Reason: ").Append(Reason).Append("\n");
             sb.Append("  Expiration: ").Append(Expiration).Append("\n");
             sb.Append("  State: ").Append(State).Append("\n");
-            sb.Append("  PatientId: ").Append(PatientId).Append("\n");
-            sb.Append("  Prescription: ").Append(Prescription).Append("\n");
+            sb.Append("  Patient: ").Append(Patient).Append("\n");
+            sb.Append("  Doctor: ").Append(Doctor).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -155,16 +155,16 @@ namespace eu.fiit.PatientsPortal.Models
                     State == other.State ||
                     State != null &&
                     State.Equals(other.State)
+                )&&
+                (
+                    Patient == other.Patient ||
+                    Patient != null &&
+                    Patient.Equals(other.Patient)
                 ) &&
                 (
-                    PatientId == other.PatientId ||
-                    PatientId != null &&
-                    PatientId.Equals(other.PatientId)
-                ) &&
-                (
-                    Prescription == other.Prescription ||
-                    Prescription != null &&
-                    Prescription.Equals(other.Prescription)
+                    Doctor == other.Doctor ||
+                    Doctor != null &&
+                    Doctor.Equals(other.Doctor)
                 );
         }
 
@@ -190,10 +190,10 @@ namespace eu.fiit.PatientsPortal.Models
                     hashCode = hashCode * 59 + Expiration.GetHashCode();
                 if (State != null)
                     hashCode = hashCode * 59 + State.GetHashCode();
-                if (PatientId != null)
-                    hashCode = hashCode * 59 + PatientId.GetHashCode();
-                if (Prescription != null)
-                    hashCode = hashCode * 59 + Prescription.GetHashCode();
+                if (Patient != null)
+                    hashCode = hashCode * 59 + Patient.GetHashCode();
+                if (Doctor != null)
+                    hashCode = hashCode * 59 + Doctor.GetHashCode();
                 return hashCode;
             }
         }
