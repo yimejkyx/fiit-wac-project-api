@@ -18,6 +18,7 @@ using eu.fiit.PatientsPortal.Attributes;
 
 using Microsoft.AspNetCore.Authorization;
 using eu.fiit.PatientsPortal.Models;
+using eu.fiit.PatientsPortal.Services;
 
 namespace eu.fiit.PatientsPortal.Controllers
 {
@@ -27,30 +28,11 @@ namespace eu.fiit.PatientsPortal.Controllers
     [ApiController]
     public class MedicinesApiController : ControllerBase
     {
+        private readonly IDataRepository repository;
 
-        private IList<Medicine> _medicines;
-
-        ///<Summary>
-        /// Gets the answer
-        ///</Summary>
-        public MedicinesApiController() =>
-            this._medicines = new List<Medicine>{
-                new Medicine{
-                    Id = 1,
-                    Name = "Paralen"
-                },
-                new Medicine{
-                    Id = 2,
-                    Name = "Ibalgin"
-                },
-                new Medicine{
-                    Id = 3,
-                    Name = "Voltaren"
-                },
-                new Medicine{
-                    Id = 4,
-                    Name = "Valetol"
-                }};
+        /// <summary/>
+        public MedicinesApiController(IDataRepository repository)
+            => this.repository = repository;
 
         /// <summary>
         /// Get all medicines
@@ -60,10 +42,29 @@ namespace eu.fiit.PatientsPortal.Controllers
         [Route("/api/medicines")]
         [ValidateModelState]
         [SwaggerOperation("GetMedicines")]
-        [SwaggerResponse(statusCode: 200, type: typeof(List<Medicine>), description: "successful operation")]
+        [SwaggerResponse(statusCode: 200, type: typeof(IEnumerable<Medicine>), description: "successful operation")]
         public virtual IActionResult GetMedicines()
         {
-            return StatusCode(200, _medicines);
+            IEnumerable<Medicine> medicines = this.repository.GetMedicineData();
+            return StatusCode(200, medicines);
+        }
+
+        /// <summary>
+        /// Deletes a medicine
+        /// </summary>
+        /// <param name="medicineId">Medicine id to delete</param>
+        /// <response code="400">Invalid ID supplied</response>
+        /// <response code="404">Medicine not found</response>
+        [HttpDelete]
+        [Route("/api/medicines/{medicineId}")]
+        [ValidateModelState]
+        [SwaggerOperation("DeleteMedicine")]
+        public virtual IActionResult DeleteMedicine([FromRoute][Required] int medicineId)
+        {
+            var medicine = this.repository.GetMedicineData(medicineId);
+            if (medicine == null) { return new NotFoundResult(); }
+            this.repository.DeleteMedicine(medicineId);
+            return new OkResult();
         }
     }
 }

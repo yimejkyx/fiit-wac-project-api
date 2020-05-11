@@ -13,6 +13,8 @@ namespace eu.fiit.PatientsPortal.Services
         private readonly LiteDatabase liteDb;
         private static readonly string VISITS_COLLECTION = "visits";
         private static readonly string EPRESCRIPTIONS_COLLECTION = "eprescriptions";
+        private static readonly string MEDICINES_COLLECTION = "medicines";
+        private static readonly string USERS_COLLECTION = "users";
 
         public DataRepository(
             IHostEnvironment environment, IConfiguration configuration)
@@ -31,7 +33,6 @@ namespace eu.fiit.PatientsPortal.Services
             var collection = this.liteDb.GetCollection<Visit>(VISITS_COLLECTION);
             return collection.FindById(visitId);
         }
-
 
         public IEnumerable<Visit> GetVisitsData()
         {
@@ -102,6 +103,83 @@ namespace eu.fiit.PatientsPortal.Services
         {
             var collection = this.liteDb.GetCollection<EPrescription>(EPRESCRIPTIONS_COLLECTION);
             collection.Delete(ePrescriptionId);
+        }
+
+        public User GetUserData(int userId)
+        {
+            var collection = this.liteDb.GetCollection<User>(USERS_COLLECTION);
+            return collection.FindById(userId);
+        }
+
+        public IEnumerable<User> GetUserData()
+        {
+            var collection = this.liteDb.GetCollection<User>(USERS_COLLECTION);
+            var result = collection.FindAll();
+            return result;
+        }
+
+        public User UpsertUserData(User user)
+        {
+            var collection = this.liteDb.GetCollection<User>(USERS_COLLECTION);
+            if (user.Id == null)
+            {
+                user.Id = 0;
+                var idValue = collection.Insert(user);
+                user.Id = idValue.AsInt32;
+            }
+            else
+            {
+                var existing = collection.FindById(user.Id);
+                if (existing == null)
+                {
+                    collection.Update(user);
+                }
+            }
+            return user;
+        }
+
+        public void DeleteUser(int userId)
+        {
+            var collection = this.liteDb.GetCollection<User>(USERS_COLLECTION);
+            collection.Delete(userId);
+        }
+
+        public Medicine GetMedicineData(int medicineId)
+        {
+            var collection = this.liteDb.GetCollection<Medicine>(MEDICINES_COLLECTION);
+            return collection.FindById(medicineId);
+        }
+
+        public IEnumerable<Medicine> GetMedicineData()
+        {
+            var collection = this.liteDb.GetCollection<Medicine>(MEDICINES_COLLECTION);
+            var result = collection.FindAll();
+            return result;
+        }
+
+         public Medicine UpsertMedicineData(Medicine medicine)
+        {
+            var collection = this.liteDb.GetCollection<Medicine>(MEDICINES_COLLECTION);
+            if (medicine.Id == null)
+            {
+                medicine.Id = 0;
+                var idValue = collection.Insert(medicine);
+                medicine.Id = idValue.AsInt32;
+            }
+            else
+            {
+                var existing = collection.FindById(medicine.Id);
+                if (existing == null)
+                {
+                    collection.Update(medicine);
+                }
+            }
+            return medicine;
+        }
+        public void DeleteMedicine(int medicineId)
+        {
+            var collection = this.liteDb.GetCollection<Medicine>(MEDICINES_COLLECTION);
+            collection.Delete(medicineId);
         }
     }
 }

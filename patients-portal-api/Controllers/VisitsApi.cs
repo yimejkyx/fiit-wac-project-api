@@ -38,6 +38,7 @@ namespace eu.fiit.PatientsPortal.Controllers
         /// Add a new Visit
         /// </summary>
         /// <param name="body">Visit object</param>
+        /// <response code="400">Invalid length supplied</response>
         /// <response code="405">Invalid input</response>
         [HttpPost]
         [Route("/api/visits")]
@@ -45,6 +46,7 @@ namespace eu.fiit.PatientsPortal.Controllers
         [SwaggerOperation("AddVisit")]
         public virtual IActionResult AddVisit([FromBody] Visit body)
         {
+            if (body.Length<=0) return StatusCode(400, "Length of visit must be greater than 0 minutes");
             this.repository.UpsertVisitData(body);
             return StatusCode(200, body);
         }

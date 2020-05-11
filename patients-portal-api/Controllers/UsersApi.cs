@@ -18,6 +18,7 @@ using eu.fiit.PatientsPortal.Attributes;
 
 using Microsoft.AspNetCore.Authorization;
 using eu.fiit.PatientsPortal.Models;
+using eu.fiit.PatientsPortal.Services;
 
 namespace eu.fiit.PatientsPortal.Controllers
 {
@@ -27,31 +28,11 @@ namespace eu.fiit.PatientsPortal.Controllers
     [ApiController]
     public class UsersApiController : ControllerBase
     {
-        private IList<User> _users;
+        private readonly IDataRepository repository;
 
-        ///<Summary>
-        /// Gets the answer
-        ///</Summary>
-        public UsersApiController() =>
-            this._users = new List<User>{
-                new User{
-                    Id = 1,
-                    Name = "Kamil Dzurman",
-                    IsDoctor = true,
-                    IsPatient = false
-                },
-                new User{
-                    Id = 2,
-                    Name = "Matej Cief",
-                    IsDoctor = true,
-                    IsPatient = false
-                },
-                new User{
-                    Id = 3,
-                    Name = "Ivan Hrozny",
-                    IsDoctor = false,
-                    IsPatient = true
-                },};
+        /// <summary/>
+        public UsersApiController(IDataRepository repository)
+            => this.repository = repository;
 
         /// <summary>
         /// Get all users
@@ -61,10 +42,29 @@ namespace eu.fiit.PatientsPortal.Controllers
         [Route("/api/users")]
         [ValidateModelState]
         [SwaggerOperation("GetUsers")]
-        [SwaggerResponse(statusCode: 200, type: typeof(List<User>), description: "successful operation")]
+        [SwaggerResponse(statusCode: 200, type: typeof(IEnumerable<User>), description: "successful operation")]
         public virtual IActionResult GetUsers()
         {
-            return StatusCode(200, _users);
+            IEnumerable<User> users = this.repository.GetUserData();
+            return StatusCode(200, users);
+        }
+
+        /// <summary>
+        /// Deletes a user
+        /// </summary>
+        /// <param name="userId">User id to delete</param>
+        /// <response code="400">Invalid ID supplied</response>
+        /// <response code="404">User not found</response>
+        [HttpDelete]
+        [Route("/api/users/{userId}")]
+        [ValidateModelState]
+        [SwaggerOperation("DeleteUser")]
+        public virtual IActionResult DeleteUser([FromRoute][Required] int userId)
+        {
+            var user = this.repository.GetMedicineData(userId);
+            if (user == null) { return new NotFoundResult(); }
+            this.repository.DeleteUser(userId);
+            return new OkResult();
         }
     }
 }

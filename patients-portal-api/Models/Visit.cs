@@ -54,7 +54,7 @@ namespace eu.fiit.PatientsPortal.Models
         /// Gets or Sets Length
         /// </summary>
         [DataMember(Name = "length")]
-        public string Length { get; set; }
+        public int? Length { get; set; }
 
         /// <summary>
         /// Gets or Sets Result
