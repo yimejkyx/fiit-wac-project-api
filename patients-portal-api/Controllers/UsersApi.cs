@@ -50,6 +50,42 @@ namespace eu.fiit.PatientsPortal.Controllers
         }
 
         /// <summary>
+        /// Add a new User
+        /// </summary>
+        /// <param name="body">User object</param>
+        /// <response code="400">Invalid length supplied</response>
+        /// <response code="405">Invalid input</response>
+        [HttpPost]
+        [Route("/api/users")]
+        [ValidateModelState]
+        [SwaggerOperation("AddUser")]
+        public virtual IActionResult AddUser([FromBody] User body)
+        {
+            this.repository.UpsertUserData(body);
+            return StatusCode(200, body);
+        }
+
+        /// <summary>
+        /// Update an existing User
+        /// </summary>
+        /// <param name="userId">User id to update</param>
+        /// <param name="body">User object</param>
+        /// <response code="400">Invalid ID supplied</response>
+        /// <response code="404">User not found</response>
+        [HttpPut]
+        [Route("/api/users/{userId}")]
+        [ValidateModelState]
+        [SwaggerOperation("UpdateUser")]
+        public virtual IActionResult UpdateUser([FromRoute][Required] int userId, [FromBody] User body)
+        {
+            if (!userId.Equals(body.Id)) { return new BadRequestResult(); }
+            var exists = this.repository.GetUserData(userId);
+            if (exists == null) { return new NotFoundResult(); }
+            this.repository.UpsertUserData(body);
+            return StatusCode(200, body);
+        }
+
+        /// <summary>
         /// Deletes a user
         /// </summary>
         /// <param name="userId">User id to delete</param>
@@ -61,7 +97,7 @@ namespace eu.fiit.PatientsPortal.Controllers
         [SwaggerOperation("DeleteUser")]
         public virtual IActionResult DeleteUser([FromRoute][Required] int userId)
         {
-            var user = this.repository.GetMedicineData(userId);
+            var user = this.repository.GetUserData(userId);
             if (user == null) { return new NotFoundResult(); }
             this.repository.DeleteUser(userId);
             return new OkResult();

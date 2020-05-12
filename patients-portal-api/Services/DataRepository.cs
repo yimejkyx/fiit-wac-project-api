@@ -52,7 +52,7 @@ namespace eu.fiit.PatientsPortal.Services
             else
             {
                 var existing = collection.FindById(visit.Id);
-                if (existing == null)
+                if (existing != null)
                 {
                     collection.Update(visit);
                 }
@@ -91,7 +91,7 @@ namespace eu.fiit.PatientsPortal.Services
             else
             {
                 var existing = collection.FindById(ePrescription.Id);
-                if (existing == null)
+                if (existing != null)
                 {
                     collection.Update(ePrescription);
                 }
@@ -130,7 +130,7 @@ namespace eu.fiit.PatientsPortal.Services
             else
             {
                 var existing = collection.FindById(user.Id);
-                if (existing == null)
+                if (existing != null)
                 {
                     collection.Update(user);
                 }
@@ -169,7 +169,7 @@ namespace eu.fiit.PatientsPortal.Services
             else
             {
                 var existing = collection.FindById(medicine.Id);
-                if (existing == null)
+                if (existing != null)
                 {
                     collection.Update(medicine);
                 }

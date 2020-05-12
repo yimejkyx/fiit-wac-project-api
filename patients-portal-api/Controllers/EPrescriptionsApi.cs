@@ -51,10 +51,30 @@ namespace eu.fiit.PatientsPortal.Controllers
         }
 
         /// <summary>
+        /// Update an existing E-Prescriptions 
+        /// </summary>
+        /// <param name="ePrescriptionId">E-Prescriptions id to update</param>
+        /// <param name="body">E-Prescriptions  object</param>
+        /// <response code="400">Invalid ID supplied</response>
+        /// <response code="404">E-Prescriptions  not found</response>
+        [HttpPut]
+        [Route("/api/eprescription/{ePrescriptionId}")]
+        [ValidateModelState]
+        [SwaggerOperation("UpdateEPrescription")]
+        public virtual IActionResult UpdateEPrescription([FromRoute][Required] int ePrescriptionId, [FromBody] EPrescription body)
+        {
+            if (!ePrescriptionId.Equals(body.Id)) { return new BadRequestResult(); }
+            var exists = this.repository.GetEPrescriptionData(ePrescriptionId);
+            if (exists == null) { return new NotFoundResult(); }
+            this.repository.UpsertEPrescriptionData(body);
+            return StatusCode(200, body);
+        }
+
+        /// <summary>
         /// Deletes a E-Prescriptions
         /// </summary>
-        /// <param name="ePrescriptionId">EPrescriptions id to delete</param>
-        /// <response code="404">EPrescriptions not found</response>
+        /// <param name="ePrescriptionId">E-Prescriptions  id to delete</param>
+        /// <response code="404">E-Prescriptions  not found</response>
         /// <response code="200">successful operation</response>
         [HttpDelete]
         [Route("/api/eprescription/{ePrescriptionId}")]
@@ -69,7 +89,7 @@ namespace eu.fiit.PatientsPortal.Controllers
         }
 
         /// <summary>
-        /// Get all e-prescriptions
+        /// Get all E-Prescriptions 
         /// </summary>
         /// <response code="200">successful operation</response>
         [HttpGet]

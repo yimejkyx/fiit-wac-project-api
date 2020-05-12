@@ -50,6 +50,42 @@ namespace eu.fiit.PatientsPortal.Controllers
         }
 
         /// <summary>
+        /// Add a new Medicine
+        /// </summary>
+        /// <param name="body">Medicine object</param>
+        /// <response code="400">Invalid length supplied</response>
+        /// <response code="405">Invalid input</response>
+        [HttpPost]
+        [Route("/api/medicines")]
+        [ValidateModelState]
+        [SwaggerOperation("AddMedicine")]
+        public virtual IActionResult AddMedicine([FromBody] Medicine body)
+        {
+            this.repository.UpsertMedicineData(body);
+            return StatusCode(200, body);
+        }
+
+        /// <summary>
+        /// Update an existing medicine
+        /// </summary>
+        /// <param name="medicineId">Medicine id to update</param>
+        /// <param name="body">Medicine object</param>
+        /// <response code="400">Invalid ID supplied</response>
+        /// <response code="404">Medicine not found</response>
+        [HttpPut]
+        [Route("/api/medicines/{medicineId}")]
+        [ValidateModelState]
+        [SwaggerOperation("UpdateMedicine")]
+        public virtual IActionResult UpdateMedicine([FromRoute][Required] int medicineId, [FromBody] Medicine body)
+        {
+            if (!medicineId.Equals(body.Id)) { return new BadRequestResult(); }
+            var exists = this.repository.GetMedicineData(medicineId);
+            if (exists == null) { return new NotFoundResult(); }
+            this.repository.UpsertMedicineData(body);
+            return StatusCode(200, body);
+        }
+
+        /// <summary>
         /// Deletes a medicine
         /// </summary>
         /// <param name="medicineId">Medicine id to delete</param>
