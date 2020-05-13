@@ -4,6 +4,7 @@
     <Copyright>Nikolas Tomastik a Lucia Lelicova</Copyright>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <AssemblyName>patients-portal-api</AssemblyName>
     <PackageId>patients-portal-api</PackageId>

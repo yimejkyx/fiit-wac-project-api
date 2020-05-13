@@ -46,8 +46,8 @@ namespace eu.fiit.PatientsPortal.Controllers
         [SwaggerOperation("AddEPrescriptions")]
         public virtual IActionResult AddEPrescriptions([FromBody] EPrescription body)
         {
-            this.repository.UpsertEPrescriptionData(body);
-            return StatusCode(200, body);
+            var parsed = this.repository.UpsertEPrescriptionData(body);
+            return StatusCode(200, parsed);
         }
 
         /// <summary>
@@ -66,8 +66,8 @@ namespace eu.fiit.PatientsPortal.Controllers
             if (!ePrescriptionId.Equals(body.Id)) { return new BadRequestResult(); }
             var exists = this.repository.GetEPrescriptionData(ePrescriptionId);
             if (exists == null) { return new NotFoundResult(); }
-            this.repository.UpsertEPrescriptionData(body);
-            return StatusCode(200, body);
+            var parsed = this.repository.UpsertEPrescriptionData(body);
+            return StatusCode(200, parsed);
         }
 
         /// <summary>

@@ -9,6 +9,7 @@
  */
 using System;
 using System.IO;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.OpenApi.Models;
@@ -78,8 +79,11 @@ namespace eu.fiit.PatientsPortal
                     {
                         Version = "1.0.0",
                         Title = "Patients Portal",
-                        Description = "Patients Portal (ASP.NET Core 3.1)"
+                        Description = "Patients Portal (ASP.NET Core 3.1)",
                     });
+                    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                    c.IncludeXmlComments(xmlPath);
                 });
         }
 

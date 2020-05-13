@@ -31,13 +31,19 @@ namespace eu.fiit.PatientsPortal.Services
         public Visit GetVisitData(int visitId)
         {
             var collection = this.liteDb.GetCollection<Visit>(VISITS_COLLECTION);
-            return collection.FindById(visitId);
+            return collection
+                .Include(x => x.Doctor)
+                .Include(x => x.Patient)
+                .FindById(visitId);
         }
 
         public IEnumerable<Visit> GetVisitsData()
         {
             var collection = this.liteDb.GetCollection<Visit>(VISITS_COLLECTION);
-            return collection.FindAll();
+            return collection
+                .Include(x => x.Doctor)
+                .Include(x => x.Patient)
+                .FindAll();
         }
 
         public Visit UpsertVisitData(Visit visit)
@@ -57,7 +63,7 @@ namespace eu.fiit.PatientsPortal.Services
                     collection.Update(visit);
                 }
             }
-            return visit;
+            return GetVisitData(visit.Id ?? default(int)); // id always exists
         }
 
         public void DeleteVisit(int visitId)
@@ -69,13 +75,21 @@ namespace eu.fiit.PatientsPortal.Services
         public EPrescription GetEPrescriptionData(int ePrescriptionId)
         {
             var collection = this.liteDb.GetCollection<EPrescription>(EPRESCRIPTIONS_COLLECTION);
-            return collection.FindById(ePrescriptionId);
+            return collection
+                .Include(x => x.Doctor)
+                .Include(x => x.Patient)
+                .Include(x => x.Medicines)
+                .FindById(ePrescriptionId);
         }
 
         public IEnumerable<EPrescription> GetEPrescriptionData()
         {
             var collection = this.liteDb.GetCollection<EPrescription>(EPRESCRIPTIONS_COLLECTION);
-            var result = collection.FindAll();
+            var result = collection
+                .Include(x => x.Doctor)
+                .Include(x => x.Patient)
+                .Include(x => x.Medicines)
+                .FindAll();
             return result;
         }
 
@@ -96,7 +110,7 @@ namespace eu.fiit.PatientsPortal.Services
                     collection.Update(ePrescription);
                 }
             }
-            return ePrescription;
+            return GetEPrescriptionData(ePrescription.Id ?? default(int)); // id always exists
         }
 
         public void DeleteEPrescrition(int ePrescriptionId)
@@ -157,7 +171,7 @@ namespace eu.fiit.PatientsPortal.Services
             return result;
         }
 
-         public Medicine UpsertMedicineData(Medicine medicine)
+        public Medicine UpsertMedicineData(Medicine medicine)
         {
             var collection = this.liteDb.GetCollection<Medicine>(MEDICINES_COLLECTION);
             if (medicine.Id == null)

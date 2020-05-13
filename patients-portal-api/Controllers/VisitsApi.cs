@@ -47,8 +47,8 @@ namespace eu.fiit.PatientsPortal.Controllers
         public virtual IActionResult AddVisit([FromBody] Visit body)
         {
             if (body.Length<=0) return StatusCode(400, "Length of visit must be greater than 0 minutes");
-            this.repository.UpsertVisitData(body);
-            return StatusCode(200, body);
+            var parsed = this.repository.UpsertVisitData(body);
+            return StatusCode(200, parsed);
         }
 
         /// <summary>
@@ -100,8 +100,8 @@ namespace eu.fiit.PatientsPortal.Controllers
             if (!visitId.Equals(body.Id)) { return new BadRequestResult(); }
             var exists = this.repository.GetVisitData(visitId);
             if (exists == null) { return new NotFoundResult(); }
-            this.repository.UpsertVisitData(body);
-            return StatusCode(200, body);
+            var parsed = this.repository.UpsertVisitData(body);
+            return StatusCode(200, parsed);
         }
     }
 }

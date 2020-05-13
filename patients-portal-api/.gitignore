@@ -1,6 +1,3 @@
 **/bin
 **/obj
 **/out
-
-data-repository-log.litedb
-data-repository.litedb

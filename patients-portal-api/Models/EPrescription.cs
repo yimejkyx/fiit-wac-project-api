@@ -17,6 +17,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using LiteDB;
 
 namespace eu.fiit.PatientsPortal.Models
 {
@@ -42,6 +43,7 @@ namespace eu.fiit.PatientsPortal.Models
         /// Gets or Sets Medicines
         /// </summary>
         [DataMember(Name = "medicines")]
+        [BsonRef("medicines")]
         public List<Medicine> Medicines { get; set; }
 
         /// <summary>
@@ -66,12 +68,14 @@ namespace eu.fiit.PatientsPortal.Models
         /// Gets or Sets Patient
         /// </summary>
         [DataMember(Name = "patient")]
+        [BsonRef("users")]
         public User Patient { get; set; }
 
         /// <summary>
         /// Gets or Sets Doctor
         /// </summary>
         [DataMember(Name = "doctor")]
+        [BsonRef("users")]
         public User Doctor { get; set; }
 
         /// <summary>
