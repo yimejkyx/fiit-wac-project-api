@@ -46,13 +46,21 @@ namespace eu.fiit.PatientsPortal.Controllers
         [SwaggerOperation("AddEPrescriptions")]
         public virtual IActionResult AddEPrescriptions([FromBody] EPrescription body)
         {
-            var eprescription = body;
-            eprescription.Expiration = DateTime.Now.AddDays(30);
-            eprescription.Created = DateTime.Now;
-            eprescription.State = "PENDING";
+            if (!body.Doctor.Id.HasValue) return StatusCode(400, "DoctorId is null");
+            if (!body.Patient.Id.HasValue) return StatusCode(400, "PatientId is null");
+            var newEPrescription = body; 
+            
+            var doctor = this.repository.GetUserData(newEPrescription.Doctor.Id.Value);
+            if (!doctor.IsDoctor.Value) return StatusCode(400, "User is not a doctor");
+            var patient = this.repository.GetUserData(newEPrescription.Patient.Id.Value);
+            if (!patient.IsPatient.Value) return StatusCode(400, "User is not a patient");
+           
+            newEPrescription.Expiration = DateTime.Now.AddDays(30);
+            newEPrescription.Created = DateTime.Now;
+            newEPrescription.State = "PENDING";
 
-            eprescription = this.repository.UpsertEPrescriptionData(eprescription);
-            return StatusCode(200, eprescription);
+            newEPrescription = this.repository.UpsertEPrescriptionData(newEPrescription);
+            return StatusCode(200, newEPrescription);
         }
 
         /// <summary>
@@ -71,8 +79,17 @@ namespace eu.fiit.PatientsPortal.Controllers
             if (!ePrescriptionId.Equals(body.Id)) { return new BadRequestResult(); }
             var exists = this.repository.GetEPrescriptionData(ePrescriptionId);
             if (exists == null) { return new NotFoundResult(); }
-            var parsed = this.repository.UpsertEPrescriptionData(body);
-            return StatusCode(200, parsed);
+            if (!body.Doctor.Id.HasValue) return StatusCode(400, "DoctorId is null");
+            if (!body.Patient.Id.HasValue) return StatusCode(400, "PatientId is null");
+            var newEPrescription = body; 
+            
+            var doctor = this.repository.GetUserData(newEPrescription.Doctor.Id.Value);
+            if (!doctor.IsDoctor.Value) return StatusCode(400, "User is not a doctor");
+            var patient = this.repository.GetUserData(newEPrescription.Patient.Id.Value);
+            if (!patient.IsPatient.Value) return StatusCode(400, "User is not a patient");
+
+            newEPrescription = this.repository.UpsertEPrescriptionData(newEPrescription);
+            return StatusCode(200, newEPrescription);
         }
 
         /// <summary>
