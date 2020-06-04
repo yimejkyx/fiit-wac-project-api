@@ -41,6 +41,12 @@ namespace eu.fiit.PatientsPortal.Services
         void DeleteVisit(int visitId);
 
         /// <summary>
+        /// Provides details about all visits for a concrete Date
+        /// </summary>
+        /// <returns>visits list</returns>
+        IEnumerable<Visit> GetVisitsDataByDate(DateTime concreteDay);
+
+        /// <summary>
         /// Provides details about specific ePrescription
         /// </summary>
         /// <param name="ePrescriptionId">id of the ePrescription</param>

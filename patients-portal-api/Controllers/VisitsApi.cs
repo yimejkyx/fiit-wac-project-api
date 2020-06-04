@@ -47,7 +47,25 @@ namespace eu.fiit.PatientsPortal.Controllers
         public virtual IActionResult AddVisit([FromBody] Visit body)
         {
             if (body.Length<=0) return StatusCode(400, "Length of visit must be greater than 0 minutes");
-            var parsed = this.repository.UpsertVisitData(body);
+            if (!body.Date.HasValue) return StatusCode(400, "Date is null");
+            var newVisit = body; 
+            IEnumerable<Visit> visitsForConcereteDay = this.repository.GetVisitsDataByDate(newVisit.Date.Value);
+            
+            foreach(var existingVisit in visitsForConcereteDay){
+                System.Console.WriteLine("som vo foreach");
+                if (existingVisit.Doctor.Id == newVisit.Doctor.Id){
+                    DateTime existingVisitStart = existingVisit.Date.Value;
+                    DateTime existingVisitEnd = existingVisit.Date.Value.AddMinutes(existingVisit.Length.Value);
+                    DateTime newVisitStart = newVisit.Date.Value;
+                    DateTime newVisitEnd = newVisit.Date.Value.AddMinutes(newVisit.Length.Value);
+
+                    bool overlap = existingVisitStart < newVisitEnd && newVisitStart < existingVisitEnd;
+                    if (overlap){
+                        return StatusCode(400, "Doctor is already booked for this time period");
+                    }
+                }
+            }
+            var parsed = this.repository.UpsertVisitData(newVisit);
             return StatusCode(200, parsed);
         }
 
