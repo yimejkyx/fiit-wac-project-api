@@ -74,9 +74,6 @@ namespace eu.fiit.PatientsPortal.Services
 
         public IEnumerable<Visit> GetVisitsDataByDate(DateTime concreteDay)
         {
-            System.Console.WriteLine("LOGG: som v getVisitsDataByDate");
-            System.Console.WriteLine("LOGG: som v getVisitsDataByDate, ");
-            System.Console.WriteLine("LOGG: som v getVisitsDataByDate concreteDay.ToShortDateString() je:", concreteDay);
             var collection = this.liteDb.GetCollection<Visit>(VISITS_COLLECTION);
             return collection
             .Include(x => x.Doctor)

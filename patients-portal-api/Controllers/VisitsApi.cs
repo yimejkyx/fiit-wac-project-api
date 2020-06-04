@@ -48,11 +48,16 @@ namespace eu.fiit.PatientsPortal.Controllers
         {
             if (body.Length<=0) return StatusCode(400, "Length of visit must be greater than 0 minutes");
             if (!body.Date.HasValue) return StatusCode(400, "Date is null");
+            if (!body.Doctor.Id.HasValue) return StatusCode(400, "DoctorId is null");
             var newVisit = body; 
+            
+            var doctor = this.repository.GetUserData(newVisit.Doctor.Id.Value);
+            if (!doctor.IsDoctor.Value) return StatusCode(400, "User is not a doctor");
+
             IEnumerable<Visit> visitsForConcereteDay = this.repository.GetVisitsDataByDate(newVisit.Date.Value);
             
             foreach(var existingVisit in visitsForConcereteDay){
-                System.Console.WriteLine("som vo foreach");
+
                 if (existingVisit.Doctor.Id == newVisit.Doctor.Id){
                     DateTime existingVisitStart = existingVisit.Date.Value;
                     DateTime existingVisitEnd = existingVisit.Date.Value.AddMinutes(existingVisit.Length.Value);
