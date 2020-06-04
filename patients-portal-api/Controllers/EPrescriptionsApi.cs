@@ -46,8 +46,13 @@ namespace eu.fiit.PatientsPortal.Controllers
         [SwaggerOperation("AddEPrescriptions")]
         public virtual IActionResult AddEPrescriptions([FromBody] EPrescription body)
         {
-            var parsed = this.repository.UpsertEPrescriptionData(body);
-            return StatusCode(200, parsed);
+            var eprescription = body;
+            eprescription.Expiration = DateTime.Now.AddDays(30);
+            eprescription.Created = DateTime.Now;
+            eprescription.State = "PENDING";
+
+            eprescription = this.repository.UpsertEPrescriptionData(eprescription);
+            return StatusCode(200, eprescription);
         }
 
         /// <summary>
