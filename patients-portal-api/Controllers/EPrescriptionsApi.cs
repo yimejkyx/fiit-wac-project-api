@@ -46,6 +46,8 @@ namespace eu.fiit.PatientsPortal.Controllers
         [SwaggerOperation("AddEPrescriptions")]
         public virtual IActionResult AddEPrescriptions([FromBody] EPrescription body)
         {
+            if (body.Patient == null) return StatusCode(400, "Patient is null");
+            if (body.Doctor == null) return StatusCode(400, "Doctor is null");
             if (!body.Doctor.Id.HasValue) return StatusCode(400, "DoctorId is null");
             if (!body.Patient.Id.HasValue) return StatusCode(400, "PatientId is null");
             var newEPrescription = body; 
@@ -79,6 +81,8 @@ namespace eu.fiit.PatientsPortal.Controllers
             if (!ePrescriptionId.Equals(body.Id)) { return new BadRequestResult(); }
             var exists = this.repository.GetEPrescriptionData(ePrescriptionId);
             if (exists == null) { return new NotFoundResult(); }
+            if (body.Patient == null) return StatusCode(400, "Patient is null");
+            if (body.Doctor == null) return StatusCode(400, "Doctor is null");
             if (!body.Doctor.Id.HasValue) return StatusCode(400, "DoctorId is null");
             if (!body.Patient.Id.HasValue) return StatusCode(400, "PatientId is null");
             var newEPrescription = body; 

@@ -48,8 +48,11 @@ namespace eu.fiit.PatientsPortal.Controllers
         {
             if (body.Length<=0) return StatusCode(400, "Length of visit must be greater than 0 minutes");
             if (!body.Date.HasValue) return StatusCode(400, "Date is null");
+            if (body.Patient == null) return StatusCode(400, "Patient is null");
+            if (body.Doctor == null) return StatusCode(400, "Doctor is null");
             if (!body.Doctor.Id.HasValue) return StatusCode(400, "DoctorId is null");
             if (!body.Patient.Id.HasValue) return StatusCode(400, "PatientId is null");
+
             var newVisit = body; 
             
             var doctor = this.repository.GetUserData(newVisit.Doctor.Id.Value);
@@ -128,6 +131,8 @@ namespace eu.fiit.PatientsPortal.Controllers
             if (exists == null) { return new NotFoundResult(); }
             if (body.Length<=0) return StatusCode(400, "Length of visit must be greater than 0 minutes");
             if (!body.Date.HasValue) return StatusCode(400, "Date is null");
+            if (body.Patient == null) return StatusCode(400, "Patient is null");
+            if (body.Doctor == null) return StatusCode(400, "Doctor is null");
             if (!body.Doctor.Id.HasValue) return StatusCode(400, "DoctorId is null");
             if (!body.Patient.Id.HasValue) return StatusCode(400, "PatientId is null");
 
