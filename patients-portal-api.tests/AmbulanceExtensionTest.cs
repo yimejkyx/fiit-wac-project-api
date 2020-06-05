@@ -170,6 +170,8 @@ namespace eu.fiit.PatientsPortal.Models
             Assert.IsTrue(objectResponse.StatusCode == 200);
         }
 
+
+        // DATA MOCKUPS
         public static List<User> MockUsers()
         {
             return new List<User>(){
@@ -188,7 +190,6 @@ namespace eu.fiit.PatientsPortal.Models
             };
         }
 
-        // DATA MOCKUPS
         public static List<Medicine> MockMedicines()
         {
             return new List<Medicine>(){
@@ -203,12 +204,106 @@ namespace eu.fiit.PatientsPortal.Models
             };
         }
 
-        public static List<Visit> MockVisits() {
-            return new List<Visit>();
+        public static List<Visit> MockVisits()
+        {
+            return new List<Visit>(){
+                new Visit(){
+                    Id = 1,
+                    Created = DateTime.Now,
+                    Date = DateTime.Now.AddDays(1),
+                    Reason = "ILLNESS",
+                    Length = 10,
+                    Result = "result1",
+                    Patient = {
+                        Id = 1,
+                        Name = "Patient 1",
+                        IsDoctor = false,
+                        IsPatient = true
+                    },
+                    Doctor = {
+                        Id = 2,
+                        Name = "Doctor 1",
+                        IsDoctor = true,
+                        IsPatient = false
+                    }
+                },
+                new Visit(){
+                    Id = 2,
+                    Created = DateTime.Now,
+                    Date = DateTime.Now.AddDays(2),
+                    Reason = "CHECK",
+                    Length = 30,
+                    Result = "result2",
+                    Patient = new User(){
+                        Id = 1,
+                        Name = "Patient 1",
+                        IsDoctor = false,
+                        IsPatient = true
+                    },
+                    Doctor = new User{
+                        Id = 2,
+                        Name = "Doctor 1",
+                        IsDoctor = true,
+                        IsPatient = false
+                    }
+                }
+            };
         }
 
         public static List<EPrescription> MockEPrescriptions() {
-            return new List<EPrescription>();
+            return new List<EPrescription>(){
+                new EPrescription{
+                    Id = 1,
+                    Created = DateTime.Now,
+                    Medicines = {
+                         new Medicine(){
+                            Id = 5,
+                            Name = "Voltaren"
+                        }
+                    },
+                    Reason = "reason1",
+                    Expiration = null,
+                    State = null,
+                    Patient = new User(){
+                        Id = 1,
+                        Name = "Patient 1",
+                        IsDoctor = false,
+                        IsPatient = true
+                    },
+                    Doctor = new User{
+                        Id = 2,
+                        Name = "Doctor 1",
+                        IsDoctor = true,
+                        IsPatient = false
+                    },
+                },
+                 new EPrescription{
+                    Id = 2,
+                    Created = DateTime.Now.AddDays(2),
+                    Medicines = {
+                         new Medicine(){
+                            Id = 1,
+                            Name = "Paralen"
+                        }
+                    },
+                    Reason = "reason2",
+                    Expiration = null,
+                    State = null,
+                    Patient = new User(){
+                        Id = 1,
+                        Name = "Patient 1",
+                        IsDoctor = false,
+                        IsPatient = true
+                    },
+                    Doctor = new User{
+                        Id = 2,
+                        Name = "Doctor 1",
+                        IsDoctor = true,
+                        IsPatient = false
+                    },
+                }
+
+            };
         }
     }
 }
