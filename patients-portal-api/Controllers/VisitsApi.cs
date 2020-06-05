@@ -59,14 +59,13 @@ namespace eu.fiit.PatientsPortal.Controllers
 
 
             IEnumerable<Visit> visitsForConcereteDay = this.repository.GetVisitsDataByDate(newVisit.Date.Value);
-            
-            foreach(var existingVisit in visitsForConcereteDay){
 
+            foreach(var existingVisit in visitsForConcereteDay){
                 if (existingVisit.Doctor.Id == newVisit.Doctor.Id){
-                    DateTime existingVisitStart = existingVisit.Date.Value;
-                    DateTime existingVisitEnd = existingVisit.Date.Value.AddMinutes(existingVisit.Length.Value);
-                    DateTime newVisitStart = newVisit.Date.Value;
-                    DateTime newVisitEnd = newVisit.Date.Value.AddMinutes(newVisit.Length.Value);
+                    DateTime existingVisitStart = existingVisit.Date.Value.ToUniversalTime();
+                    DateTime existingVisitEnd = existingVisitStart.AddMinutes(existingVisit.Length.Value);
+                    DateTime newVisitStart = newVisit.Date.Value.ToUniversalTime();
+                    DateTime newVisitEnd = newVisitStart.AddMinutes(newVisit.Length.Value);
 
                     bool overlap = existingVisitStart < newVisitEnd && newVisitStart < existingVisitEnd;
                     if (overlap){
@@ -140,13 +139,13 @@ namespace eu.fiit.PatientsPortal.Controllers
 
 
             IEnumerable<Visit> visitsForConcereteDay = this.repository.GetVisitsDataByDate(updateVisit.Date.Value);
-            
+        
             foreach(var existingVisit in visitsForConcereteDay){
                 if ((existingVisit.Doctor.Id == updateVisit.Doctor.Id)&&(existingVisit.Id.Value != updateVisit.Id.Value)){
-                    DateTime existingVisitStart = existingVisit.Date.Value;
-                    DateTime existingVisitEnd = existingVisit.Date.Value.AddMinutes(existingVisit.Length.Value);
-                    DateTime updateVisitStart = updateVisit.Date.Value;
-                    DateTime updateVisitEnd = updateVisit.Date.Value.AddMinutes(updateVisit.Length.Value);
+                    DateTime existingVisitStart = existingVisit.Date.Value.ToUniversalTime();
+                    DateTime existingVisitEnd = existingVisitStart.AddMinutes(existingVisit.Length.Value);
+                    DateTime updateVisitStart = updateVisit.Date.Value.ToUniversalTime();
+                    DateTime updateVisitEnd = updateVisitStart.AddMinutes(updateVisit.Length.Value);
 
                     bool overlap = existingVisitStart < updateVisitEnd && updateVisitStart < existingVisitEnd;
                     if (overlap){
