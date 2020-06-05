@@ -23,11 +23,15 @@ namespace eu.fiit.PatientsPortal.Models
 
         protected readonly List<User> Users;
         protected readonly List<Medicine> Medicines;
+        protected readonly List<Visit> Visits;
+        protected readonly List<EPrescription> EPrescriptions;
 
-        protected BaseControllerTests(List<User> users, List<Medicine> medicines)
+        protected BaseControllerTests(List<User> users, List<Medicine> medicines, List<Visit> visits, List<EPrescription> ePrescriptions)
         {
             Users = users;
             Medicines = medicines;
+            Visits = visits;
+            EPrescriptions = ePrescriptions;
             Repository = new Mock<IDataRepository>();
 
             // Users
@@ -50,6 +54,28 @@ namespace eu.fiit.PatientsPortal.Models
             Repository.Setup(x => x.UpsertMedicineData(It.IsAny<Medicine>())).Returns(medicines[0]);
             Repository.Setup(x => x.DeleteMedicine(It.IsAny<int>()));
 
+            // EPrescriptions
+            // EPrescription GetEPrescriptionData(int ePrescriptionId);
+            // IEnumerable<EPrescription> GetEPrescriptionData();
+            // EPrescription UpsertEPrescriptionData(EPrescription ePrescription);
+            // void DeleteEPrescrition(int ePrescriptionId);
+            Repository.Setup(x => x.GetEPrescriptionData(It.IsAny<int>())).Returns(ePrescriptions[0]);
+            Repository.Setup(x => x.GetEPrescriptionData()).Returns(ePrescriptions);
+            Repository.Setup(x => x.UpsertEPrescriptionData(It.IsAny<EPrescription>())).Returns(ePrescriptions[0]);
+            Repository.Setup(x => x.DeleteEPrescrition(It.IsAny<int>()));
+
+            // Visits
+            // Visit GetVisitData(int visitId);
+            // IEnumerable<Visit> GetVisitsData();
+            // Visit UpsertVisitData(Visit visit);
+            // void DeleteVisit(int visitId);
+            // IEnumerable<Visit> GetVisitsDataByDate(DateTime concreteDay);
+            Repository.Setup(x => x.GetVisitData(It.IsAny<int>())).Returns(visits[0]);
+            Repository.Setup(x => x.GetVisitsData()).Returns(visits);
+            Repository.Setup(x => x.UpsertVisitData(It.IsAny<Visit>())).Returns(visits[0]);
+            Repository.Setup(x => x.DeleteVisit(It.IsAny<int>()));
+            Repository.Setup(x => x.GetVisitsDataByDate(It.IsAny<DateTime>())).Returns(visits);
+
             UsersApi = new UsersApiController(Repository.Object);
             VisitsApi = new VisitsApiController(Repository.Object);
             MedicinesApi = new MedicinesApiController(Repository.Object);
@@ -64,7 +90,7 @@ namespace eu.fiit.PatientsPortal.Models
         private static readonly List<Medicine> mockMedicines = MockMedicines();
         private static readonly List<Visit> mockVisits = MockVisits();
         private static readonly List<EPrescription> mockEPrescriptions = MockEPrescriptions();
-        public ApiTests() : base(mockUsers, mockMedicines) { }
+        public ApiTests() : base(mockUsers, mockMedicines, mockVisits, mockEPrescriptions) { }
 
         private TestContext testContextInstance;
 
