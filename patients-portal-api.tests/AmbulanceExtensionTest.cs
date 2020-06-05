@@ -40,6 +40,7 @@ namespace eu.fiit.PatientsPortal.Models
             // User UpsertUserData(User user);
             // void DeleteUser(int userId);
             Repository.Setup(x => x.GetUserData(It.IsAny<int>())).Returns(users[0]);
+            // Repository.Setup(x => x.GetUserData(It.IsAny<int>())).Returns((int key) => users[key-1]);
             Repository.Setup(x => x.GetUserData()).Returns(users);
             Repository.Setup(x => x.UpsertUserData(It.IsAny<User>())).Returns(users[0]);
             Repository.Setup(x => x.DeleteUser(It.IsAny<int>()));
@@ -210,6 +211,92 @@ namespace eu.fiit.PatientsPortal.Models
             Assert.IsInstanceOfType(objectResponse.Value, typeof(IEnumerable<Visit>));
         }
 
+
+        [TestMethod]
+        public void AddVisit_ReturnsStatus200()
+        {
+            // var newVisit = new Visit(){
+            //     Created = DateTime.Now,
+            //     Date = DateTime.Now.AddDays(5),
+            //     Reason = "ILLNESS",
+            //     Length = 10,
+            //     Result = "result",
+            //     Patient = new User(){
+            //         Id = 1,
+            //         Name = "Patient 1",
+            //         IsDoctor = false,
+            //         IsPatient = true
+            //     },
+            //     Doctor = new User(){
+            //         Id = 2,
+            //         Name = "Doctor 1",
+            //         IsDoctor = true,
+            //         IsPatient = false
+            //     }
+            // };
+        
+            // var response = VisitsApi.AddVisit(newVisit);
+            
+            // Repository.Verify(mock => mock.UpsertVisitData(It.IsAny<Visit>()), Times.Once);
+            // var objectResponse = response as ObjectResult;
+            // Assert.IsTrue(objectResponse.StatusCode == 200);
+        }
+
+       [TestMethod]
+        public void DeleteVisit_ReturnsStatus200()
+        {
+            var response = VisitsApi.DeleteVisit(Visits[0].Id.Value);
+
+            Repository.Verify(mock => mock.GetVisitData(Visits[0].Id.Value), Times.Once);
+            Repository.Verify(mock => mock.DeleteVisit(Visits[0].Id.Value), Times.Once);
+
+            var objectResponse = response as OkResult;
+            Assert.IsTrue(objectResponse.StatusCode == 200);
+        }
+
+
+        [TestMethod]
+        public void UpdateVisit_ReturnsStatus200()
+        {
+            var response = VisitsApi.UpdateVisit(Visits[0].Id ?? 1, Visits[0]);
+
+            // TODO
+        }
+
+         // EPRESCRIPTIONS
+        [TestMethod]
+        public void GetEPrescriptions_ReturnsListOfEPrescriptions()
+        {
+            var response = EPrescriptionsApi.GetEPrescriptions();
+
+            Repository.Verify(mock => mock.GetEPrescriptionData(), Times.Once);
+
+            var objectResponse = response as ObjectResult;
+            Assert.IsTrue(objectResponse.StatusCode == 200);
+            Assert.IsInstanceOfType(objectResponse.Value, typeof(IEnumerable<EPrescription>));
+        }
+
+       [TestMethod]
+        public void DeleteEprescription_ReturnsStatus200()
+        {
+            var response = EPrescriptionsApi.DeleteEPrescriptions(EPrescriptions[0].Id.Value);
+
+            Repository.Verify(mock => mock.GetEPrescriptionData(EPrescriptions[0].Id.Value), Times.Once);
+            Repository.Verify(mock => mock.DeleteEPrescrition(EPrescriptions[0].Id.Value), Times.Once);
+
+            var objectResponse = response as OkResult;
+            Assert.IsTrue(objectResponse.StatusCode == 200);
+        }
+
+
+        [TestMethod]
+        public void UpdateEPrescription_ReturnsStatus200()
+        {
+            var response = EPrescriptionsApi.UpdateEPrescription(EPrescriptions[0].Id ?? 1, EPrescriptions[0]);
+
+            // TODO
+        }
+    
         // DATA MOCKUPS
         public static List<User> MockUsers()
         {
