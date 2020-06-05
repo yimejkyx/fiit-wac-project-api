@@ -197,6 +197,19 @@ namespace eu.fiit.PatientsPortal.Models
         }
 
 
+        // VISITS
+        [TestMethod]
+        public void GetVisits_ReturnsListOfVisits()
+        {
+            var response = VisitsApi.GetVisits();
+
+            Repository.Verify(mock => mock.GetVisitsData(), Times.Once);
+
+            var objectResponse = response as ObjectResult;
+            Assert.IsTrue(objectResponse.StatusCode == 200);
+            Assert.IsInstanceOfType(objectResponse.Value, typeof(IEnumerable<Visit>));
+        }
+
         // DATA MOCKUPS
         public static List<User> MockUsers()
         {
@@ -240,13 +253,13 @@ namespace eu.fiit.PatientsPortal.Models
                     Reason = "ILLNESS",
                     Length = 10,
                     Result = "result1",
-                    Patient = {
+                    Patient = new User(){
                         Id = 1,
                         Name = "Patient 1",
                         IsDoctor = false,
                         IsPatient = true
                     },
-                    Doctor = {
+                    Doctor = new User(){
                         Id = 2,
                         Name = "Doctor 1",
                         IsDoctor = true,
@@ -266,7 +279,7 @@ namespace eu.fiit.PatientsPortal.Models
                         IsDoctor = false,
                         IsPatient = true
                     },
-                    Doctor = new User{
+                    Doctor = new User(){
                         Id = 2,
                         Name = "Doctor 1",
                         IsDoctor = true,
@@ -281,7 +294,7 @@ namespace eu.fiit.PatientsPortal.Models
                 new EPrescription{
                     Id = 1,
                     Created = DateTime.Now,
-                    Medicines = {
+                    Medicines = new List<Medicine>(){
                          new Medicine(){
                             Id = 5,
                             Name = "Voltaren"
@@ -306,7 +319,7 @@ namespace eu.fiit.PatientsPortal.Models
                  new EPrescription{
                     Id = 2,
                     Created = DateTime.Now.AddDays(2),
-                    Medicines = {
+                    Medicines = new List<Medicine>(){
                          new Medicine(){
                             Id = 1,
                             Name = "Paralen"
@@ -321,7 +334,7 @@ namespace eu.fiit.PatientsPortal.Models
                         IsDoctor = false,
                         IsPatient = true
                     },
-                    Doctor = new User{
+                    Doctor = new User(){
                         Id = 2,
                         Name = "Doctor 1",
                         IsDoctor = true,
