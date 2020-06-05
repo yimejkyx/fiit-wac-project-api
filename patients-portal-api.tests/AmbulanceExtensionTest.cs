@@ -90,9 +90,17 @@ namespace eu.fiit.PatientsPortal.Models
         [TestMethod]
         public void AddUser_ReturnsStatus200()
         {
-            var response = UsersApi.AddUser(Users[0]);
-
-            // TODO
+            var newUser = new User { 
+                Name = "Doctor 1",
+                IsDoctor = true,
+                IsPatient = false
+            };
+        
+            var response = UsersApi.AddUser(newUser);
+            
+            Repository.Verify(mock => mock.UpsertUserData(It.IsAny<User>()), Times.Once);
+            var objectResponse = response as ObjectResult;
+            Assert.IsTrue(objectResponse.StatusCode == 200);
         }
 
         [TestMethod]
@@ -131,9 +139,15 @@ namespace eu.fiit.PatientsPortal.Models
         [TestMethod]
         public void AddMedicine_ReturnsStatus200()
         {
-            var response = MedicinesApi.AddMedicine(Medicines[0]);
+            var newMedicine = new Medicine { 
+                Name = "Medicine 1",
+            };
 
-            // TODO
+            var response = MedicinesApi.AddMedicine(newMedicine);
+            
+            Repository.Verify(mock => mock.UpsertMedicineData(It.IsAny<Medicine>()), Times.Once);
+            var objectResponse = response as ObjectResult;
+            Assert.IsTrue(objectResponse.StatusCode == 200);
         }
 
         [TestMethod]
