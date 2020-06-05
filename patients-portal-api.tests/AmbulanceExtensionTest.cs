@@ -17,6 +17,10 @@ namespace eu.fiit.PatientsPortal.Models
     {
         protected readonly Mock<IDataRepository> Repository;
         protected readonly UsersApiController UsersApi;
+        protected readonly VisitsApiController VisitsApi;
+        protected readonly MedicinesApiController MedicinesApi;
+        protected readonly EPrescriptionsApiController EPrescriptionsApi;
+
         protected readonly List<User> Users;
 
         protected BaseControllerTests(List<User> users)
@@ -24,15 +28,14 @@ namespace eu.fiit.PatientsPortal.Models
             Users = users;
             Repository = new Mock<IDataRepository>();
             Repository.Setup(x => x.GetUserData()).Returns(users);
-            // Repository.Setup(x => x.DeleteUser()).Returns(users);
+            Repository.Setup(x => x.GetUserData(It.IsAny<int>())).Returns(users[0]);
+            Repository.Setup(x => x.DeleteUser(It.IsAny<int>()));
 
-            // AdminsApi = new AdminsApiController(Repository.Object);
-            // DevApi = new DevelopersApiController(Repository.Object);
             UsersApi = new UsersApiController(Repository.Object);
-            // VisitsApi = new VisitsApiController(Repository.Object);
-            // MedicinesApi = new MedicinesApiController(Repository.Object);
-            // EPrescriptionsApi = new EPrescriptionsApiController(Repository.Object);
-            
+            VisitsApi = new VisitsApiController(Repository.Object);
+            MedicinesApi = new MedicinesApiController(Repository.Object);
+            EPrescriptionsApi = new EPrescriptionsApiController(Repository.Object);
+
         }
     }
 
@@ -59,25 +62,23 @@ namespace eu.fiit.PatientsPortal.Models
             var response = UsersApi.GetUsers();
 
             Repository.Verify(mock => mock.GetUserData(), Times.Once);
-            TestContext.WriteLine(JsonConvert.SerializeObject(response));
 
             var objectResponse = response as ObjectResult;
-   
             Assert.IsTrue(objectResponse.StatusCode == 200);
             Assert.IsInstanceOfType(objectResponse.Value, typeof(IEnumerable<User>));
         }
 
-    //    [TestMethod]
-    //     public void DeleteUser_ReturnsStatus200()
-    //     {
-    //         var response = UsersApi.DeleteUser(Users[0].Id.Value);
+        [TestMethod]
+        public void DeleteUser_ReturnsStatus200()
+        {
+            var response = UsersApi.DeleteUser(Users[0].Id.Value);
 
-    //         Repository.Verify(mock => mock.GetUserData(It.IsAny<string>()), Times.Once);
-    //         Repository.Verify(mock => mock.DeleteUser(It.IsAny<string>()), Times.Once);
+            Repository.Verify(mock => mock.GetUserData(Users[0].Id.Value), Times.Once);
+            Repository.Verify(mock => mock.DeleteUser(Users[0].Id.Value), Times.Once);
 
-    //         var objectResponse = response as ObjectResult;
-    //         Assert.IsTrue(objectResponse.StatusCode == 200);
-    //     }
+            var objectResponse = response as OkResult;
+            Assert.IsTrue(objectResponse.StatusCode == 200);
+        }
 
 
         public static List<User> MockUsers()
