@@ -109,7 +109,7 @@ namespace eu.fiit.PatientsPortal
                     if (!httpRequest.Headers.ContainsKey("X-Forwarded-Host")) return;
 
                     var serverUrl = $"{httpRequest.Headers["X-Forwarded-Proto"]}://" +
-                        $"{httpRequest.Headers["X-Forwarded-Host"]}/" +
+                        $"{httpRequest.Headers["X-Forwarded-Host"]}" +
                         $"{httpRequest.Headers["X-Forwarded-Prefix"]}";
 
                     swaggerDoc.Servers = new List<OpenApiServer>()
