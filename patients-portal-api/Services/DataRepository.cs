@@ -23,7 +23,7 @@ namespace eu.fiit.PatientsPortal.Services
             if (dbPath == null || dbPath.Length == 0)
             {
                 dbPath = Path.Combine(
-                    environment.ContentRootPath, "data-repository.litedb");
+                    environment.ContentRootPath, "data", "data-repository.litedb");
             }
             this.liteDb = new LiteDatabase(dbPath);
         }

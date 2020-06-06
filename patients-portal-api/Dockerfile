@@ -14,5 +14,6 @@ RUN dotnet publish -c Release -o out
 # build runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 WORKDIR /app
+VOLUME /app/data
 COPY --from=build-env /app/out .
 ENTRYPOINT ["dotnet", "patients-portal-api.dll"]

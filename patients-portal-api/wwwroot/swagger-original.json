@@ -1,156 +1,587 @@
 {
-  "openapi" : "3.0.0",
+  "openapi" : "3.0.1",
   "info" : {
     "title" : "Patients Portal",
-    "description" : "Best Medical Portal API ever",
-    "contact" : {
-      "email" : "nikolas.tsk@gmail.com"
-    },
-    "license" : {
-      "name" : "Apache 2.0",
-      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
-    },
+    "description" : "Patients Portal (ASP.NET Core 3.1)",
     "version" : "1.0.0"
   },
   "servers" : [ {
     "url" : "https://virtserver.swaggerhub.com/api",
     "description" : "SwaggerHub API Auto Mocking"
   } ],
-  "tags" : [ {
-    "name" : "Medicines"
-  }, {
-    "name" : "Users",
-    "description" : "Patients and Doctors"
-  }, {
-    "name" : "Visits"
-  }, {
-    "name" : "E-Prescriptions"
-  } ],
   "paths" : {
-    "/medicines" : {
+    "/api/eprescription" : {
       "get" : {
-        "tags" : [ "Medicines" ],
-        "summary" : "Get all medicines",
-        "operationId" : "getMedicines",
+        "tags" : [ "EPrescriptionsApi" ],
+        "summary" : "Get all E-Prescriptions",
         "responses" : {
           "200" : {
             "description" : "successful operation",
             "content" : {
+              "text/plain" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/EPrescription"
+                  },
+                  "x-content-type" : "text/plain"
+                }
+              },
               "application/json" : {
                 "schema" : {
                   "type" : "array",
                   "items" : {
-                    "$ref" : "#/components/schemas/Medicine"
-                  },
-                  "x-content-type" : "application/json"
+                    "$ref" : "#/components/schemas/EPrescription"
+                  }
                 }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/users" : {
-      "get" : {
-        "tags" : [ "Users" ],
-        "summary" : "Get all users",
-        "operationId" : "getUsers",
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "content" : {
-              "application/json" : {
+              },
+              "text/json" : {
                 "schema" : {
                   "type" : "array",
                   "items" : {
-                    "$ref" : "#/components/schemas/User"
-                  },
-                  "x-content-type" : "application/json"
+                    "$ref" : "#/components/schemas/EPrescription"
+                  }
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/visits" : {
-      "get" : {
-        "tags" : [ "Visits" ],
-        "summary" : "Get all visits",
-        "operationId" : "getVisits",
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "$ref" : "#/components/schemas/Visit"
-                  },
-                  "x-content-type" : "application/json"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put" : {
-        "tags" : [ "Visits" ],
-        "summary" : "Update an existing Visit",
-        "operationId" : "updateVisit",
-        "requestBody" : {
-          "description" : "Visit object",
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/Visit"
-              }
-            },
-            "application/xml" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/Visit"
-              }
-            }
-          },
-          "required" : true
-        },
-        "responses" : {
-          "400" : {
-            "description" : "Invalid ID supplied"
-          },
-          "404" : {
-            "description" : "Visit not found"
           }
         }
       },
       "post" : {
-        "tags" : [ "Visits" ],
-        "summary" : "Add a new Visit",
-        "operationId" : "addVisit",
+        "tags" : [ "EPrescriptionsApi" ],
+        "summary" : "Add a new E-Prescriptions",
         "requestBody" : {
-          "description" : "Visit object",
+          "description" : "E-Prescriptions object",
           "content" : {
+            "application/json-patch+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/EPrescription"
+              }
+            },
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/Visit"
+                "$ref" : "#/components/schemas/EPrescription"
+              }
+            },
+            "text/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/EPrescription"
+              }
+            },
+            "application/*+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/EPrescription"
               }
             }
-          },
-          "required" : true
+          }
         },
         "responses" : {
-          "405" : {
+          "200" : {
+            "description" : "successful operation"
+          },
+          "400" : {
             "description" : "Invalid input"
           }
         }
       }
     },
-    "/visits/{visitId}" : {
+    "/api/eprescription/{ePrescriptionId}" : {
+      "put" : {
+        "tags" : [ "EPrescriptionsApi" ],
+        "summary" : "Update an existing E-Prescriptions",
+        "parameters" : [ {
+          "name" : "ePrescriptionId",
+          "in" : "path",
+          "description" : "E-Prescriptions id to update",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "E-Prescriptions  object",
+          "content" : {
+            "application/json-patch+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/EPrescription"
+              }
+            },
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/EPrescription"
+              }
+            },
+            "text/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/EPrescription"
+              }
+            },
+            "application/*+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/EPrescription"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "successful operation"
+          },
+          "400" : {
+            "description" : "Invalid input"
+          }
+        }
+      },
       "delete" : {
-        "tags" : [ "Visits" ],
+        "tags" : [ "EPrescriptionsApi" ],
+        "summary" : "Deletes a E-Prescriptions",
+        "parameters" : [ {
+          "name" : "ePrescriptionId",
+          "in" : "path",
+          "description" : "E-Prescriptions  id to delete",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation"
+          },
+          "400" : {
+            "description" : "E-Prescriptions  not found"
+          }
+        }
+      }
+    },
+    "/api/medicines" : {
+      "get" : {
+        "tags" : [ "MedicinesApi" ],
+        "summary" : "Get all medicines",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "text/plain" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Medicine"
+                  },
+                  "x-content-type" : "text/plain"
+                }
+              },
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Medicine"
+                  }
+                }
+              },
+              "text/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Medicine"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "MedicinesApi" ],
+        "summary" : "Add a new Medicine",
+        "requestBody" : {
+          "description" : "Medicine object",
+          "content" : {
+            "application/json-patch+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Medicine"
+              }
+            },
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Medicine"
+              }
+            },
+            "text/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Medicine"
+              }
+            },
+            "application/*+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Medicine"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/api/medicines/{medicineId}" : {
+      "put" : {
+        "tags" : [ "MedicinesApi" ],
+        "summary" : "Update an existing medicine",
+        "parameters" : [ {
+          "name" : "medicineId",
+          "in" : "path",
+          "description" : "Medicine id to update",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Medicine object",
+          "content" : {
+            "application/json-patch+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Medicine"
+              }
+            },
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Medicine"
+              }
+            },
+            "text/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Medicine"
+              }
+            },
+            "application/*+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Medicine"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "successful operation"
+          },
+          "400" : {
+            "description" : "Invalid ID supplied. Medicine not found."
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "MedicinesApi" ],
+        "summary" : "Deletes a medicine",
+        "parameters" : [ {
+          "name" : "medicineId",
+          "in" : "path",
+          "description" : "Medicine id to delete",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation"
+          },
+          "400" : {
+            "description" : "Invalid ID supplied. Medicine not found"
+          }
+        }
+      }
+    },
+    "/api/users" : {
+      "get" : {
+        "tags" : [ "UsersApi" ],
+        "summary" : "Get all users",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "text/plain" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/User"
+                  },
+                  "x-content-type" : "text/plain"
+                }
+              },
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/User"
+                  }
+                }
+              },
+              "text/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "UsersApi" ],
+        "summary" : "Add a new User",
+        "requestBody" : {
+          "description" : "User object",
+          "content" : {
+            "application/json-patch+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/User"
+              }
+            },
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/User"
+              }
+            },
+            "text/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/User"
+              }
+            },
+            "application/*+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/api/users/{userId}" : {
+      "put" : {
+        "tags" : [ "UsersApi" ],
+        "summary" : "Update an existing User",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "User id to update",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "User object",
+          "content" : {
+            "application/json-patch+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/User"
+              }
+            },
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/User"
+              }
+            },
+            "text/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/User"
+              }
+            },
+            "application/*+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "successful operation"
+          },
+          "400" : {
+            "description" : "Invalid ID supplied"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "UsersApi" ],
+        "summary" : "Deletes a user",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "User id to delete",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation"
+          },
+          "400" : {
+            "description" : "Invalid ID supplied"
+          }
+        }
+      }
+    },
+    "/api/visits" : {
+      "get" : {
+        "tags" : [ "VisitsApi" ],
+        "summary" : "Get all visits",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "text/plain" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Visit"
+                  },
+                  "x-content-type" : "text/plain"
+                }
+              },
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Visit"
+                  }
+                }
+              },
+              "text/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Visit"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "VisitsApi" ],
+        "summary" : "Add a new Visit",
+        "requestBody" : {
+          "description" : "Visit object",
+          "content" : {
+            "application/json-patch+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Visit"
+              }
+            },
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Visit"
+              }
+            },
+            "text/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Visit"
+              }
+            },
+            "application/*+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Visit"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "successful operation"
+          },
+          "400" : {
+            "description" : "Invalid length supplied"
+          }
+        }
+      }
+    },
+    "/api/visits/{visitId}" : {
+      "put" : {
+        "tags" : [ "VisitsApi" ],
+        "summary" : "Update an existing Visit",
+        "parameters" : [ {
+          "name" : "visitId",
+          "in" : "path",
+          "description" : "Visit id to update",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Visit object",
+          "content" : {
+            "application/json-patch+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Visit"
+              }
+            },
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Visit"
+              }
+            },
+            "text/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Visit"
+              }
+            },
+            "application/*+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Visit"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "successful operation"
+          },
+          "400" : {
+            "description" : "Invalid ID supplied"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "VisitsApi" ],
         "summary" : "Deletes a Visit",
-        "operationId" : "deleteVisit",
         "parameters" : [ {
           "name" : "visitId",
           "in" : "path",
@@ -160,86 +591,15 @@
           "explode" : false,
           "schema" : {
             "type" : "integer",
-            "format" : "int64"
+            "format" : "int32"
           }
         } ],
-        "responses" : {
-          "400" : {
-            "description" : "Invalid ID supplied"
-          },
-          "404" : {
-            "description" : "Visit not found"
-          }
-        }
-      }
-    },
-    "/eprescription" : {
-      "get" : {
-        "tags" : [ "E-Prescriptions" ],
-        "summary" : "Get all e-prescriptions",
-        "operationId" : "getEPrescriptions",
         "responses" : {
           "200" : {
-            "description" : "successful operation",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "$ref" : "#/components/schemas/EPrescription"
-                  },
-                  "x-content-type" : "application/json"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post" : {
-        "tags" : [ "E-Prescriptions" ],
-        "summary" : "Add a new E-Prescriptions",
-        "operationId" : "addEPrescriptions",
-        "requestBody" : {
-          "description" : "E-Prescriptions object",
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/EPrescription"
-              }
-            }
+            "description" : "successful operation"
           },
-          "required" : true
-        },
-        "responses" : {
-          "405" : {
-            "description" : "Invalid input"
-          }
-        }
-      }
-    },
-    "/eprescription/{ePrescriptionId}" : {
-      "delete" : {
-        "tags" : [ "E-Prescriptions" ],
-        "summary" : "Deletes a E-Prescriptions",
-        "operationId" : "deleteEPrescriptions",
-        "parameters" : [ {
-          "name" : "ePrescriptionId",
-          "in" : "path",
-          "description" : "EPrescriptions id to delete",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int64"
-          }
-        } ],
-        "responses" : {
           "400" : {
             "description" : "Invalid ID supplied"
-          },
-          "404" : {
-            "description" : "EPrescriptions not found"
           }
         }
       }
@@ -251,11 +611,15 @@
         "type" : "object",
         "properties" : {
           "id" : {
+            "type" : "integer"
+          },
+          "name" : {
             "type" : "string"
           }
         },
         "example" : {
-          "id" : "id"
+          "name" : "name",
+          "id" : 6
         }
       },
       "User" : {
@@ -263,32 +627,121 @@
         "properties" : {
           "id" : {
             "type" : "string"
-          }
-        },
-        "example" : {
-          "id" : "id"
-        }
-      },
-      "Visit" : {
-        "type" : "object",
-        "properties" : {
-          "id" : {
+          },
+          "name" : {
             "type" : "string"
+          },
+          "isDoctor" : {
+            "type" : "boolean"
+          },
+          "isPatient" : {
+            "type" : "boolean"
           }
         },
         "example" : {
-          "id" : "id"
+          "isDoctor" : true,
+          "name" : "name",
+          "id" : "id",
+          "isPatient" : true
         }
       },
       "EPrescription" : {
         "type" : "object",
         "properties" : {
           "id" : {
+            "type" : "integer"
+          },
+          "created" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "medicines" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Medicine"
+            }
+          },
+          "reason" : {
             "type" : "string"
+          },
+          "expiration" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "state" : {
+            "type" : "string"
+          },
+          "patient" : {
+            "$ref" : "#/components/schemas/User"
+          },
+          "doctor" : {
+            "$ref" : "#/components/schemas/User"
           }
         },
         "example" : {
-          "id" : "id"
+          "reason" : "reason",
+          "medicines" : [ {
+            "name" : "name",
+            "id" : 6
+          }, {
+            "name" : "name",
+            "id" : 6
+          } ],
+          "created" : "2000-01-23T04:56:07.000+00:00",
+          "patient" : {
+            "isDoctor" : true,
+            "name" : "name",
+            "id" : "id",
+            "isPatient" : true
+          },
+          "expiration" : "2000-01-23T04:56:07.000+00:00",
+          "id" : 0,
+          "state" : "state"
+        }
+      },
+      "Visit" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "created" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "reason" : {
+            "type" : "string"
+          },
+          "length" : {
+            "type" : "integer"
+          },
+          "result" : {
+            "type" : "string"
+          },
+          "patient" : {
+            "$ref" : "#/components/schemas/User"
+          },
+          "doctor" : {
+            "$ref" : "#/components/schemas/User"
+          }
+        },
+        "example" : {
+          "date" : "2000-01-23T04:56:07.000+00:00",
+          "result" : "result",
+          "reason" : "reason",
+          "created" : "2000-01-23T04:56:07.000+00:00",
+          "patient" : {
+            "isDoctor" : true,
+            "name" : "name",
+            "id" : "id",
+            "isPatient" : true
+          },
+          "length" : 6,
+          "id" : 0
         }
       }
     }
