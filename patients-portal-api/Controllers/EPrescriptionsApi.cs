@@ -38,7 +38,7 @@ namespace eu.fiit.PatientsPortal.Controllers
         /// Add a new E-Prescriptions
         /// </summary>
         /// <param name="body">E-Prescriptions object</param>
-        /// <response code="405">Invalid input</response>
+        /// <response code="400">Invalid input</response>
         /// <response code="200">successful operation</response>
         [HttpPost]
         [Route("/api/eprescription")]
@@ -50,13 +50,13 @@ namespace eu.fiit.PatientsPortal.Controllers
             if (body.Doctor == null) return StatusCode(400, "Doctor is null");
             if (!body.Doctor.Id.HasValue) return StatusCode(400, "DoctorId is null");
             if (!body.Patient.Id.HasValue) return StatusCode(400, "PatientId is null");
-            var newEPrescription = body; 
-            
+            var newEPrescription = body;
+
             var doctor = this.repository.GetUserData(newEPrescription.Doctor.Id.Value);
             if (!doctor.IsDoctor.Value) return StatusCode(400, "User is not a doctor");
             var patient = this.repository.GetUserData(newEPrescription.Patient.Id.Value);
             if (!patient.IsPatient.Value) return StatusCode(400, "User is not a patient");
-           
+
             newEPrescription.Expiration = DateTime.Now.AddDays(30);
             newEPrescription.Created = DateTime.Now;
             newEPrescription.State = "PENDING";
@@ -70,23 +70,23 @@ namespace eu.fiit.PatientsPortal.Controllers
         /// </summary>
         /// <param name="ePrescriptionId">E-Prescriptions id to update</param>
         /// <param name="body">E-Prescriptions  object</param>
-        /// <response code="400">Invalid ID supplied</response>
-        /// <response code="404">E-Prescriptions  not found</response>
+        /// <response code="400">Invalid input</response>
+        /// <response code="200">successful operation</response>
         [HttpPut]
         [Route("/api/eprescription/{ePrescriptionId}")]
         [ValidateModelState]
         [SwaggerOperation("UpdateEPrescription")]
         public virtual IActionResult UpdateEPrescription([FromRoute][Required] int ePrescriptionId, [FromBody] EPrescription body)
         {
-            if (!ePrescriptionId.Equals(body.Id)) { return new BadRequestResult(); }
+            if (!ePrescriptionId.Equals(body.Id)) { return StatusCode(400, "Eprescription.Id from Path does not correspond with Eprescription.Id in body"); }
             var exists = this.repository.GetEPrescriptionData(ePrescriptionId);
-            if (exists == null) { return new NotFoundResult(); }
+            if (exists == null) { return StatusCode(400, "Invalid Eprescription.Id, Eprescription does not exist"); }
             if (body.Patient == null) return StatusCode(400, "Patient is null");
             if (body.Doctor == null) return StatusCode(400, "Doctor is null");
             if (!body.Doctor.Id.HasValue) return StatusCode(400, "DoctorId is null");
             if (!body.Patient.Id.HasValue) return StatusCode(400, "PatientId is null");
-            var newEPrescription = body; 
-            
+            var newEPrescription = body;
+
             var doctor = this.repository.GetUserData(newEPrescription.Doctor.Id.Value);
             if (!doctor.IsDoctor.Value) return StatusCode(400, "User is not a doctor");
             var patient = this.repository.GetUserData(newEPrescription.Patient.Id.Value);
@@ -100,7 +100,7 @@ namespace eu.fiit.PatientsPortal.Controllers
         /// Deletes a E-Prescriptions
         /// </summary>
         /// <param name="ePrescriptionId">E-Prescriptions  id to delete</param>
-        /// <response code="404">E-Prescriptions  not found</response>
+        /// <response code="400">E-Prescriptions  not found</response>
         /// <response code="200">successful operation</response>
         [HttpDelete]
         [Route("/api/eprescription/{ePrescriptionId}")]
@@ -109,9 +109,9 @@ namespace eu.fiit.PatientsPortal.Controllers
         public virtual IActionResult DeleteEPrescriptions([FromRoute][Required] int ePrescriptionId)
         {
             var eprescription = this.repository.GetEPrescriptionData(ePrescriptionId);
-            if (eprescription == null) { return new NotFoundResult(); }
+            if (eprescription == null) { return StatusCode(400, "Invalid Eprescription.Id, Eprescription does not exist"); }
             this.repository.DeleteEPrescrition(ePrescriptionId);
-            return new OkResult();
+            return StatusCode(200);
         }
 
         /// <summary>
