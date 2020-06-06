@@ -9,6 +9,7 @@
  */
 using System;
 using System.IO;
+using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -101,10 +102,26 @@ namespace eu.fiit.PatientsPortal
                 .UseDefaultFiles()
                 .UseStaticFiles();
 
-            app.UseSwagger();
+            app.UseSwagger(c =>
+            {
+                c.PreSerializeFilters.Add((swaggerDoc, httpRequest) =>
+                {
+                    if (!httpRequest.Headers.ContainsKey("X-Forwarded-Host")) return;
+
+                    var serverUrl = $"{httpRequest.Headers["X-Forwarded-Proto"]}://" +
+                        $"{httpRequest.Headers["X-Forwarded-Host"]}/" +
+                        $"{httpRequest.Headers["X-Forwarded-Prefix"]}";
+
+                    swaggerDoc.Servers = new List<OpenApiServer>()
+                    {
+                        new OpenApiServer { Url = serverUrl }
+                    };
+                });
+            });
+
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/1.0.0/swagger.json", "Patients Portal");
+                c.SwaggerEndpoint("1.0.0/swagger.json", "Patients Portal");
             });
 
 
