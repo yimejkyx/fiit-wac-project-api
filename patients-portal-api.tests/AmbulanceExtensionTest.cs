@@ -39,8 +39,13 @@ namespace eu.fiit.PatientsPortal.Models
             // IEnumerable<User> GetUserData();
             // User UpsertUserData(User user);
             // void DeleteUser(int userId);
-            Repository.Setup(x => x.GetUserData(It.IsAny<int>())).Returns(users[0]);
-            // Repository.Setup(x => x.GetUserData(It.IsAny<int>())).Returns((int key) => users[key-1]);
+            // Repository.Setup(x => x.GetUserData(It.IsAny<int>())).Returns(users[0]);
+            Repository.Setup(x => x.GetUserData(It.IsAny<int>())).Returns((int key) =>
+            {
+                int newKey = key - 1;
+                if (newKey > users.Count || newKey < 0) return null;
+                return users[newKey];
+            });
             Repository.Setup(x => x.GetUserData()).Returns(users);
             Repository.Setup(x => x.UpsertUserData(It.IsAny<User>())).Returns(users[0]);
             Repository.Setup(x => x.DeleteUser(It.IsAny<int>()));
@@ -117,14 +122,15 @@ namespace eu.fiit.PatientsPortal.Models
         [TestMethod]
         public void AddUser_ReturnsStatus200()
         {
-            var newUser = new User { 
+            var newUser = new User
+            {
                 Name = "Doctor 1",
                 IsDoctor = true,
                 IsPatient = false
             };
-        
+
             var response = UsersApi.AddUser(newUser);
-            
+
             Repository.Verify(mock => mock.UpsertUserData(It.IsAny<User>()), Times.Once);
             var objectResponse = response as ObjectResult;
             Assert.IsTrue(objectResponse.StatusCode == 200);
@@ -137,13 +143,14 @@ namespace eu.fiit.PatientsPortal.Models
 
             Repository.Verify(mock => mock.UpsertUserData(It.IsAny<User>()), Times.Once);
             var objectResponse = response as ObjectResult;
-            Assert.IsTrue(objectResponse.StatusCode == 200);       
+            Assert.IsTrue(objectResponse.StatusCode == 200);
         }
 
         [TestMethod]
         public void UpdateUser_UserIdDoesNotMatchWithUrlPathParamId_ReturnsStatus400()
         {
-             var newUser = new User { 
+            var newUser = new User
+            {
                 Id = 10,
                 Name = "Doctor 1",
                 IsDoctor = true,
@@ -153,7 +160,26 @@ namespace eu.fiit.PatientsPortal.Models
 
             Repository.Verify(mock => mock.UpsertUserData(It.IsAny<User>()), Times.Never);
             var objectResponse = response as BadRequestResult;
-            Assert.IsTrue(objectResponse.StatusCode == 400);       
+            Assert.IsTrue(objectResponse.StatusCode == 400);
+        }
+
+        [TestMethod]
+        public void UpdateUser_UserDoesntExist_ReturnsStatus400()
+        {
+            var updatedUser = new User
+            {
+                Id = 15,
+                Name = "Doctor 1",
+                IsDoctor = true,
+                IsPatient = false
+            };
+            var response = UsersApi.UpdateUser(15, updatedUser);
+
+            Repository.Verify(mock => mock.GetUserData(15), Times.Once);
+            Repository.Verify(mock => mock.UpsertUserData(updatedUser), Times.Never);
+
+            var objectResponse = response as NotFoundResult;
+            Assert.IsTrue(objectResponse.StatusCode == 404);
         }
 
         [TestMethod]
@@ -184,12 +210,13 @@ namespace eu.fiit.PatientsPortal.Models
         [TestMethod]
         public void AddMedicine_ReturnsStatus200()
         {
-            var newMedicine = new Medicine { 
+            var newMedicine = new Medicine
+            {
                 Name = "Medicine 1",
             };
 
             var response = MedicinesApi.AddMedicine(newMedicine);
-            
+
             Repository.Verify(mock => mock.UpsertMedicineData(It.IsAny<Medicine>()), Times.Once);
             var objectResponse = response as ObjectResult;
             Assert.IsTrue(objectResponse.StatusCode == 200);
@@ -202,13 +229,14 @@ namespace eu.fiit.PatientsPortal.Models
 
             Repository.Verify(mock => mock.UpsertMedicineData(It.IsAny<Medicine>()), Times.Once);
             var objectResponse = response as ObjectResult;
-            Assert.IsTrue(objectResponse.StatusCode == 200);  
+            Assert.IsTrue(objectResponse.StatusCode == 200);
         }
 
         [TestMethod]
         public void UpdateMedicine_MedicineIdDoesNotMatchWithUrlPathParamId_ReturnsStatus400()
         {
-             var newUser = new User { 
+            var newUser = new User
+            {
                 Id = 10,
                 Name = "Doctor 1",
                 IsDoctor = true,
@@ -218,7 +246,7 @@ namespace eu.fiit.PatientsPortal.Models
 
             Repository.Verify(mock => mock.UpsertUserData(It.IsAny<User>()), Times.Never);
             var objectResponse = response as BadRequestResult;
-            Assert.IsTrue(objectResponse.StatusCode == 400);       
+            Assert.IsTrue(objectResponse.StatusCode == 400);
         }
 
         [TestMethod]
@@ -232,7 +260,6 @@ namespace eu.fiit.PatientsPortal.Models
             var objectResponse = response as OkResult;
             Assert.IsTrue(objectResponse.StatusCode == 200);
         }
-
 
         // VISITS
         [TestMethod]
@@ -250,54 +277,58 @@ namespace eu.fiit.PatientsPortal.Models
         [TestMethod]
         public void AddVisit_ReturnsStatus200()
         {
-            var newVisit = new Visit(){
+            var newVisit = new Visit()
+            {
                 Id = 5,
                 Created = DateTime.Now,
                 Date = DateTime.Now.AddDays(10),
                 Reason = "ILLNESS",
                 Length = 10,
                 Result = "result1",
-                Patient = new User(){
+                Patient = new User()
+                {
                     Id = 1,
                     Name = "Patient 1",
                     IsDoctor = false,
                     IsPatient = true
                 },
-                Doctor = new User(){
+                Doctor = new User()
+                {
                     Id = 2,
                     Name = "Doctor 1",
                     IsDoctor = true,
                     IsPatient = false
                 }
             };
-        
-            // TODO -> je problem, ze pouzivame getUserData na patient a doctor, a tu mame namokovane, getUserData vracia prveho
-            // var response = VisitsApi.AddVisit(newVisit);
-            
-            // Repository.Verify(mock => mock.UpsertVisitData(It.IsAny<Visit>()), Times.Once);
-            // var objectResponse = response as ObjectResult;
-            // Assert.IsTrue(objectResponse.StatusCode == 200);
+
+            var response = VisitsApi.AddVisit(newVisit);
+
+            Repository.Verify(mock => mock.UpsertVisitData(It.IsAny<Visit>()), Times.Once);
+            var objectResponse = response as ObjectResult;
+            Assert.IsTrue(objectResponse.StatusCode == 200);
         }
 
 
         [TestMethod]
         public void AddVisit_PatientIsNull_ReturnsStatus400()
         {
-            var newVisit = new Visit(){
+            var newVisit = new Visit()
+            {
                 Created = DateTime.Now,
                 Date = DateTime.Now.AddDays(5),
                 Reason = "ILLNESS",
                 Length = 10,
                 Result = "result",
                 Patient = null,
-                Doctor = new User(){
+                Doctor = new User()
+                {
                     Id = 2,
                     Name = "Doctor 1",
                     IsDoctor = true,
                     IsPatient = false
                 }
             };
-        
+
             var response = VisitsApi.AddVisit(newVisit);
             Repository.Verify(mock => mock.UpsertVisitData(It.IsAny<Visit>()), Times.Never);
 
@@ -305,32 +336,34 @@ namespace eu.fiit.PatientsPortal.Models
             Assert.IsTrue(objectResponse.StatusCode == 400);
         }
 
-         [TestMethod]
-        public void AddVisit_DoctorIsNull_ReturnsStatus400 ()
+        [TestMethod]
+        public void AddVisit_DoctorIsNull_ReturnsStatus400()
         {
-            var newVisit = new Visit(){
+            var newVisit = new Visit()
+            {
                 Created = DateTime.Now,
                 Date = DateTime.Now.AddDays(5),
                 Reason = "ILLNESS",
                 Length = 10,
                 Result = "result",
-                Patient = new User(){
+                Patient = new User()
+                {
                     Id = 5,
                     Name = "Patient 1",
                     IsDoctor = false,
                     IsPatient = true
                 },
-                Doctor =null
+                Doctor = null
             };
-        
+
             var response = VisitsApi.AddVisit(newVisit);
             Repository.Verify(mock => mock.UpsertVisitData(It.IsAny<Visit>()), Times.Never);
-            
+
             var objectResponse = response as ObjectResult;
             Assert.IsTrue(objectResponse.StatusCode == 400);
         }
 
-       [TestMethod]
+        [TestMethod]
         public void DeleteVisit_ReturnsStatus200()
         {
             var response = VisitsApi.DeleteVisit(Visits[0].Id.Value);
@@ -348,13 +381,13 @@ namespace eu.fiit.PatientsPortal.Models
         {
             var response = VisitsApi.UpdateVisit(Visits[0].Id ?? 1, Visits[0]);
 
-           //TO-DO v mock datach User IS NOT A DOCTOR lebo sa stale vracia ten prvy
-            // Repository.Verify(mock => mock.UpsertVisitData(It.IsAny<Visit>()), Times.Once);
-            // var objectResponse = response as ObjectResult;
-            // Assert.IsTrue(objectResponse.StatusCode == 200);  
+            Repository.Verify(mock => mock.UpsertVisitData(It.IsAny<Visit>()), Times.Once);
+            var objectResponse = response as ObjectResult;
+
+            Assert.IsTrue(objectResponse.StatusCode == 200);
         }
 
-         // EPRESCRIPTIONS
+        // EPRESCRIPTIONS
         [TestMethod]
         public void GetEPrescriptions_ReturnsListOfEPrescriptions()
         {
@@ -367,7 +400,7 @@ namespace eu.fiit.PatientsPortal.Models
             Assert.IsInstanceOfType(objectResponse.Value, typeof(IEnumerable<EPrescription>));
         }
 
-       [TestMethod]
+        [TestMethod]
         public void DeleteEprescription_ReturnsStatus200()
         {
             var response = EPrescriptionsApi.DeleteEPrescriptions(EPrescriptions[0].Id.Value);
@@ -385,9 +418,15 @@ namespace eu.fiit.PatientsPortal.Models
         {
             var response = EPrescriptionsApi.UpdateEPrescription(EPrescriptions[0].Id ?? 1, EPrescriptions[0]);
 
-            // TODO
+            Repository.Verify(mock => mock.GetEPrescriptionData(EPrescriptions[0].Id.Value), Times.Once);
+            Repository.Verify(mock => mock.GetUserData(EPrescriptions[0].Doctor.Id.Value), Times.Once);
+            Repository.Verify(mock => mock.GetUserData(EPrescriptions[0].Patient.Id.Value), Times.Once);
+            Repository.Verify(mock => mock.UpsertEPrescriptionData(EPrescriptions[0]), Times.Once);
+
+            var objectResponse = response as ObjectResult;
+            Assert.IsTrue(objectResponse.StatusCode == 200);
         }
-    
+
         // DATA MOCKUPS
         public static List<User> MockUsers()
         {
@@ -467,7 +506,8 @@ namespace eu.fiit.PatientsPortal.Models
             };
         }
 
-        public static List<EPrescription> MockEPrescriptions() {
+        public static List<EPrescription> MockEPrescriptions()
+        {
             return new List<EPrescription>(){
                 new EPrescription{
                     Id = 1,
