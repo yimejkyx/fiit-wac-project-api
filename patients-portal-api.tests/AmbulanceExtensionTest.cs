@@ -211,35 +211,87 @@ namespace eu.fiit.PatientsPortal.Models
             Assert.IsInstanceOfType(objectResponse.Value, typeof(IEnumerable<Visit>));
         }
 
-
         [TestMethod]
-        public void AddVisit_ReturnsStatus200()
+        public void AddVisit_PatientIsNull_ReturnsStatus200()
         {
-            // var newVisit = new Visit(){
-            //     Created = DateTime.Now,
-            //     Date = DateTime.Now.AddDays(5),
-            //     Reason = "ILLNESS",
-            //     Length = 10,
-            //     Result = "result",
-            //     Patient = new User(){
-            //         Id = 1,
-            //         Name = "Patient 1",
-            //         IsDoctor = false,
-            //         IsPatient = true
-            //     },
-            //     Doctor = new User(){
-            //         Id = 2,
-            //         Name = "Doctor 1",
-            //         IsDoctor = true,
-            //         IsPatient = false
-            //     }
-            // };
+            var newVisit = new Visit(){
+                Id = 5,
+                Created = DateTime.Now,
+                Date = DateTime.Now.AddDays(1),
+                Reason = "ILLNESS",
+                Length = 10,
+                Result = "result1",
+                Patient = new User(){
+                    Id = 1,
+                    Name = "Patient 1",
+                    IsDoctor = false,
+                    IsPatient = true
+                },
+                Doctor = new User(){
+                    Id = 2,
+                    Name = "Doctor 1",
+                    IsDoctor = true,
+                    IsPatient = false
+                }
+            };
         
+            // TODO -> je problem, ze pouzivame getUserData na patient a doctor, a tu mame namokovane, getUserData vracia prveho
             // var response = VisitsApi.AddVisit(newVisit);
             
             // Repository.Verify(mock => mock.UpsertVisitData(It.IsAny<Visit>()), Times.Once);
             // var objectResponse = response as ObjectResult;
             // Assert.IsTrue(objectResponse.StatusCode == 200);
+        }
+
+
+        [TestMethod]
+        public void AddVisit_PatientIsNull_ReturnsStatus400()
+        {
+            var newVisit = new Visit(){
+                Created = DateTime.Now,
+                Date = DateTime.Now.AddDays(5),
+                Reason = "ILLNESS",
+                Length = 10,
+                Result = "result",
+                Patient = null,
+                Doctor = new User(){
+                    Id = 2,
+                    Name = "Doctor 1",
+                    IsDoctor = true,
+                    IsPatient = false
+                }
+            };
+        
+            var response = VisitsApi.AddVisit(newVisit);
+            Repository.Verify(mock => mock.UpsertVisitData(It.IsAny<Visit>()), Times.Never);
+
+            var objectResponse = response as ObjectResult;
+            Assert.IsTrue(objectResponse.StatusCode == 400);
+        }
+
+         [TestMethod]
+        public void AddVisit_DoctorIsNull_ReturnsStatus400 ()
+        {
+            var newVisit = new Visit(){
+                Created = DateTime.Now,
+                Date = DateTime.Now.AddDays(5),
+                Reason = "ILLNESS",
+                Length = 10,
+                Result = "result",
+                Patient = new User(){
+                    Id = 5,
+                    Name = "Patient 1",
+                    IsDoctor = false,
+                    IsPatient = true
+                },
+                Doctor =null
+            };
+        
+            var response = VisitsApi.AddVisit(newVisit);
+            Repository.Verify(mock => mock.UpsertVisitData(It.IsAny<Visit>()), Times.Never);
+            
+            var objectResponse = response as ObjectResult;
+            Assert.IsTrue(objectResponse.StatusCode == 400);
         }
 
        [TestMethod]
