@@ -121,7 +121,7 @@ namespace eu.fiit.PatientsPortal
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("1.0.0/swagger.json", "Patients Portal");
+                c.SwaggerEndpoint("./1.0.0/swagger.json", "Patients Portal");
             });
 
 
