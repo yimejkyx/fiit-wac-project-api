@@ -53,8 +53,7 @@ namespace eu.fiit.PatientsPortal.Controllers
         /// Add a new User
         /// </summary>
         /// <param name="body">User object</param>
-        /// <response code="400">Invalid length supplied</response>
-        /// <response code="405">Invalid input</response>
+        /// <response code="200">successful operation</response>
         [HttpPost]
         [Route("/api/users")]
         [ValidateModelState]
@@ -71,16 +70,16 @@ namespace eu.fiit.PatientsPortal.Controllers
         /// <param name="userId">User id to update</param>
         /// <param name="body">User object</param>
         /// <response code="400">Invalid ID supplied</response>
-        /// <response code="404">User not found</response>
+        /// <response code="200">successful operation</response>
         [HttpPut]
         [Route("/api/users/{userId}")]
         [ValidateModelState]
         [SwaggerOperation("UpdateUser")]
         public virtual IActionResult UpdateUser([FromRoute][Required] int userId, [FromBody] User body)
         {
-            if (!userId.Equals(body.Id)) { return new BadRequestResult(); }
+            if (!userId.Equals(body.Id)) { return StatusCode(400, "Id from Path does not correspond with Id in body"); }
             var exists = this.repository.GetUserData(userId);
-            if (exists == null) { return new NotFoundResult(); }
+            if (exists == null) { return StatusCode(400, "Invalid ID supplied. User not found."); }
             this.repository.UpsertUserData(body);
             return StatusCode(200, body);
         }
@@ -90,7 +89,7 @@ namespace eu.fiit.PatientsPortal.Controllers
         /// </summary>
         /// <param name="userId">User id to delete</param>
         /// <response code="400">Invalid ID supplied</response>
-        /// <response code="404">User not found</response>
+        /// <response code="200">successful operation</response>
         [HttpDelete]
         [Route("/api/users/{userId}")]
         [ValidateModelState]
@@ -98,9 +97,9 @@ namespace eu.fiit.PatientsPortal.Controllers
         public virtual IActionResult DeleteUser([FromRoute][Required] int userId)
         {
             var user = this.repository.GetUserData(userId);
-            if (user == null) { return new NotFoundResult(); }
+            if (user == null) { return StatusCode(400, "Invalid ID supplied. User not found."); }
             this.repository.DeleteUser(userId);
-            return new OkResult();
+            return StatusCode(200);
         }
     }
 }

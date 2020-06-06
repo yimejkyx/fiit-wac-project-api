@@ -53,8 +53,7 @@ namespace eu.fiit.PatientsPortal.Controllers
         /// Add a new Medicine
         /// </summary>
         /// <param name="body">Medicine object</param>
-        /// <response code="400">Invalid length supplied</response>
-        /// <response code="405">Invalid input</response>
+        /// <response code="200">successful operation</response>
         [HttpPost]
         [Route("/api/medicines")]
         [ValidateModelState]
@@ -70,17 +69,17 @@ namespace eu.fiit.PatientsPortal.Controllers
         /// </summary>
         /// <param name="medicineId">Medicine id to update</param>
         /// <param name="body">Medicine object</param>
-        /// <response code="400">Invalid ID supplied</response>
-        /// <response code="404">Medicine not found</response>
+        /// <response code="400">Invalid ID supplied. Medicine not found.</response>
+        /// <response code="200">successful operation</response>
         [HttpPut]
         [Route("/api/medicines/{medicineId}")]
         [ValidateModelState]
         [SwaggerOperation("UpdateMedicine")]
         public virtual IActionResult UpdateMedicine([FromRoute][Required] int medicineId, [FromBody] Medicine body)
         {
-            if (!medicineId.Equals(body.Id)) { return new BadRequestResult(); }
+            if (!medicineId.Equals(body.Id)) { return StatusCode(400, "Medicine.Id from Path does not correspond with Medicine.Id in body"); }
             var exists = this.repository.GetMedicineData(medicineId);
-            if (exists == null) { return new NotFoundResult(); }
+            if (exists == null) { return StatusCode(400, "Invalid ID supplied. Medicine not found."); }
             this.repository.UpsertMedicineData(body);
             return StatusCode(200, body);
         }
@@ -89,8 +88,8 @@ namespace eu.fiit.PatientsPortal.Controllers
         /// Deletes a medicine
         /// </summary>
         /// <param name="medicineId">Medicine id to delete</param>
-        /// <response code="400">Invalid ID supplied</response>
-        /// <response code="404">Medicine not found</response>
+        /// <response code="400">Invalid ID supplied. Medicine not found</response>
+        /// <response code="200">successful operation</response>
         [HttpDelete]
         [Route("/api/medicines/{medicineId}")]
         [ValidateModelState]
@@ -98,9 +97,9 @@ namespace eu.fiit.PatientsPortal.Controllers
         public virtual IActionResult DeleteMedicine([FromRoute][Required] int medicineId)
         {
             var medicine = this.repository.GetMedicineData(medicineId);
-            if (medicine == null) { return new NotFoundResult(); }
+            if (medicine == null) { return StatusCode(400, "Invalid ID supplied. Medicine not found."); }
             this.repository.DeleteMedicine(medicineId);
-            return new OkResult();
+            return StatusCode(200);
         }
     }
 }
